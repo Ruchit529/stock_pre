@@ -9,7 +9,7 @@ services:
         value: "3.12"
     plan: free
 
-  - type: static
+  - type: web
     name: stock-frontend
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
