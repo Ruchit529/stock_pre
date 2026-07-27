@@ -147,41 +147,42 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
             if is_rate_limit_exception(e):
                 mark_yahoo_rate_limited()
         
-        if not has_name or yf_price_raw is None:
-            logger.warning(f"Yahoo Finance APIs blocked/failed for {raw_sym}. Triggering Screener.in fallback...")
-            from backend.utils import fetch_screener_ratios
-            try:
-                scr_data = fetch_screener_ratios(raw_sym)
-                if scr_data and scr_data.get("name") and scr_data.get("current_price"):
-                    info["shortName"] = scr_data["name"]
-                    info["longName"] = scr_data["name"]
-                    info["symbol"] = raw_sym
-                    current_price = scr_data["current_price"]
-                    change_pct = scr_data.get("change_pct", 0.0)
-                    prev_close = current_price / (1.0 + (change_pct / 100.0)) if change_pct else current_price
+    # Fallback to Screener.in if we still don't have basic data (whether Yahoo failed or was rate-limited)
+    if not has_name or yf_price_raw is None:
+        logger.warning(f"Yahoo Finance APIs blocked/failed/bypassed for {raw_sym}. Triggering Screener.in fallback...")
+        from backend.utils import fetch_screener_ratios
+        try:
+            scr_data = fetch_screener_ratios(raw_sym)
+            if scr_data and scr_data.get("name") and scr_data.get("current_price"):
+                info["shortName"] = scr_data["name"]
+                info["longName"] = scr_data["name"]
+                info["symbol"] = raw_sym
+                current_price = scr_data["current_price"]
+                change_pct = scr_data.get("change_pct", 0.0)
+                prev_close = current_price / (1.0 + (change_pct / 100.0)) if change_pct else current_price
+                
+                info["currentPrice"] = current_price
+                info["previousClose"] = prev_close
+                info["marketCap"] = scr_data.get("market_cap", 0) * 10000000
+                info["trailingPE"] = scr_data.get("pe")
+                info["returnOnEquity"] = scr_data.get("roe", 0) / 100.0 if scr_data.get("roe") else None
+                info["returnOnCapitalEmployed"] = scr_data.get("roce", 0) / 100.0 if scr_data.get("roce") else None
+                info["debtToEquity"] = scr_data.get("de", 0) * 100.0 if scr_data.get("de") else None
+                info["currentRatio"] = scr_data.get("current_ratio")
+                info["interestCoverage"] = scr_data.get("interest_coverage")
+                
+                if scr_data.get("annual_results"):
+                    annual_results = scr_data["annual_results"]
+                if scr_data.get("bs_results"):
+                    bs_results = scr_data["bs_results"]
                     
-                    info["currentPrice"] = current_price
-                    info["previousClose"] = prev_close
-                    info["marketCap"] = scr_data.get("market_cap", 0) * 10000000
-                    info["trailingPE"] = scr_data.get("pe")
-                    info["returnOnEquity"] = scr_data.get("roe", 0) / 100.0 if scr_data.get("roe") else None
-                    info["returnOnCapitalEmployed"] = scr_data.get("roce", 0) / 100.0 if scr_data.get("roce") else None
-                    info["debtToEquity"] = scr_data.get("de", 0) * 100.0 if scr_data.get("de") else None
-                    info["currentRatio"] = scr_data.get("current_ratio")
-                    info["interestCoverage"] = scr_data.get("interest_coverage")
-                    
-                    if scr_data.get("annual_results"):
-                        annual_results = scr_data["annual_results"]
-                    if scr_data.get("bs_results"):
-                        bs_results = scr_data["bs_results"]
-                        
-                    has_name = True
-                    yf_price_raw = scr_data["current_price"]
-                else:
-                    raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE and Screener.in fallback failed.")
-            except Exception as e:
-                logger.error(f"Screener.in fallback failed for {raw_sym}: {e}", exc_info=True)
-                raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE. Yahoo and Screener fallbacks failed: {str(e)}")
+                has_name = True
+                yf_price_raw = scr_data["current_price"]
+            else:
+                raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE and Screener.in fallback failed.")
+        except Exception as e:
+            logger.error(f"Screener.in fallback failed for {raw_sym}: {e}", exc_info=True)
+            raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE. Yahoo and Screener fallbacks failed: {str(e)}")
 
     current_price = float(yf_price_raw)
     prev_close = safe_float(info.get("previousClose") or info.get("regularMarketPreviousClose"), current_price)
@@ -367,6 +368,15 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
         screener_data = fetch_screener_enrichment(raw_sym)
         if screener_data:
             logger.info(f"Screener.in enrichment merged for {raw_sym}")
+            
+            # Use Screener's change_pct if the current change_pct is 0.0
+            scr_change_pct = screener_data.get("change_pct", 0.0)
+            if (price_info.get("price_change_pct") == 0.0 or price_info.get("price_change_pct") is None) and scr_change_pct != 0.0:
+                price_info["price_change_pct"] = scr_change_pct
+                p_current = price_info["current_price"]
+                p_prev = p_current / (1.0 + (scr_change_pct / 100.0))
+                price_info["price_change"] = p_current - p_prev
+                
             price_info["sales_1yr"] = screener_data.get("sales_1yr")
             price_info["sales_5yr"] = screener_data.get("sales_5yr")
             price_info["profit_1yr"] = screener_data.get("profit_1yr")
@@ -408,6 +418,32 @@ def fetch_screener_enrichment(symbol: str) -> Dict[str, Any]:
     try:
         soup = BeautifulSoup(html_text, 'html.parser')
         enrichment = {}
+
+        # Extract daily price change percentage from the up/down span
+        change_pct = 0.0
+        change_span = soup.find('span', class_=lambda c: c and ('up' in c or 'down' in c) and 'margin-left-4' in c)
+        if not change_span:
+            # Fallback to any span with class 'up' or 'down' that contains numeric characters
+            for span in soup.find_all('span', class_=lambda c: c and ('up' in c or 'down' in c)):
+                span_text = span.text.strip()
+                if '%' in span_text or any(char.isdigit() for char in span_text):
+                    change_span = span
+                    break
+
+        if change_span:
+            txt = change_span.text.strip().replace('%', '')
+            try:
+                val = float(txt)
+                classes = change_span.get('class', [])
+                if isinstance(classes, str):
+                    classes = classes.split()
+                if 'down' in classes:
+                    change_pct = -val
+                else:
+                    change_pct = val
+            except ValueError:
+                pass
+        enrichment['change_pct'] = change_pct
 
         # 1. Top ratios
         for li in soup.find_all('li', class_=lambda c: c and 'flex' in c):
