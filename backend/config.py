@@ -2,6 +2,13 @@ import logging
 import requests
 from typing import Dict, Any, List
 
+# Monkeypatch requests.exceptions.DNSError for yfinance compatibility
+if not hasattr(requests.exceptions, "DNSError"):
+    class DNSError(requests.exceptions.ConnectionError):
+        pass
+    requests.exceptions.DNSError = DNSError
+
+
 # Logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("stock_analysis_api")

@@ -3,8 +3,29 @@ import pandas as pd
 from typing import Dict, Any, Tuple, List
 from fastapi import HTTPException
 from concurrent.futures import ThreadPoolExecutor
+import time
 from backend.config import logger
 from backend.utils import safe_float
+
+# Yahoo Finance rate-limit tracking
+YAHOO_RATE_LIMIT_TIMESTAMP = 0.0
+YAHOO_RATE_LIMIT_COOLDOWN = 600  # 10 minutes
+
+def check_yahoo_rate_limited() -> bool:
+    global YAHOO_RATE_LIMIT_TIMESTAMP
+    if time.time() - YAHOO_RATE_LIMIT_TIMESTAMP < YAHOO_RATE_LIMIT_COOLDOWN:
+        return True
+    return False
+
+def mark_yahoo_rate_limited():
+    global YAHOO_RATE_LIMIT_TIMESTAMP
+    logger.warning("Yahoo Finance rate limit (HTTP 429) detected. Bypassing Yahoo Finance calls for 10 minutes.")
+    YAHOO_RATE_LIMIT_TIMESTAMP = time.time()
+
+def is_rate_limit_exception(e: Exception) -> bool:
+    err_msg = str(e).lower()
+    return "429" in err_msg or "too many requests" in err_msg or "rate limit" in err_msg
+
 
 def fetch_yahooquery_fallback(symbol: str) -> Dict[str, Any]:
     """Fallback Tier 2: Uses yahooquery if yfinance fails to get basic info."""
@@ -57,49 +78,74 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
     bs_results = []
     cf_results = []
 
-    logger.info(f"Fetching Yahoo Finance API data for {raw_sym}")
-    ticker = yf.Ticker(raw_sym)
+    info = {}
+    income_stmt = None
+    balance_sheet = None
+    cashflow = None
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        future_info = executor.submit(lambda: ticker.info or {})
-        future_income = executor.submit(lambda: ticker.financials)
-        future_bs = executor.submit(lambda: ticker.balance_sheet)
-        future_cf = executor.submit(lambda: ticker.cashflow)
+    if check_yahoo_rate_limited():
+        logger.info(f"Yahoo Finance rate limit is active. Bypassing Yahoo calls for {raw_sym}")
+    else:
+        logger.info(f"Fetching Yahoo Finance API data for {raw_sym}")
+        try:
+            ticker = yf.Ticker(raw_sym)
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                future_info = executor.submit(lambda: ticker.info or {})
+                future_income = executor.submit(lambda: ticker.financials)
+                future_bs = executor.submit(lambda: ticker.balance_sheet)
+                future_cf = executor.submit(lambda: ticker.cashflow)
 
-        try:
-            info = future_info.result()
+                try:
+                    info = future_info.result()
+                except Exception as e:
+                    logger.warning(f"yfinance info fetch failed: {e}")
+                    if is_rate_limit_exception(e):
+                        mark_yahoo_rate_limited()
+                    info = {}
+                    
+                try:
+                    income_stmt = future_income.result()
+                except Exception as e:
+                    logger.warning(f"yfinance financials fetch failed: {e}")
+                    if is_rate_limit_exception(e):
+                        mark_yahoo_rate_limited()
+                    income_stmt = None
+                    
+                try:
+                    balance_sheet = future_bs.result()
+                except Exception as e:
+                    logger.warning(f"yfinance balance sheet fetch failed: {e}")
+                    if is_rate_limit_exception(e):
+                        mark_yahoo_rate_limited()
+                    balance_sheet = None
+                    
+                try:
+                    cashflow = future_cf.result()
+                except Exception as e:
+                    logger.warning(f"yfinance cashflow fetch failed: {e}")
+                    if is_rate_limit_exception(e):
+                        mark_yahoo_rate_limited()
+                    cashflow = None
         except Exception as e:
-            logger.warning(f"yfinance info fetch failed: {e}")
-            info = {}
-            
-        try:
-            income_stmt = future_income.result()
-        except Exception as e:
-            logger.warning(f"yfinance financials fetch failed: {e}")
-            income_stmt = None
-            
-        try:
-            balance_sheet = future_bs.result()
-        except Exception as e:
-            logger.warning(f"yfinance balance sheet fetch failed: {e}")
-            balance_sheet = None
-            
-        try:
-            cashflow = future_cf.result()
-        except Exception as e:
-            logger.warning(f"yfinance cashflow fetch failed: {e}")
-            cashflow = None
+            logger.warning(f"yfinance initialization failed: {e}")
+            if is_rate_limit_exception(e):
+                mark_yahoo_rate_limited()
 
     has_name = info.get("shortName") or info.get("longName") or info.get("symbol")
     yf_price_raw = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
 
-    # Fallback to yahooquery if yfinance info is empty
-    if not has_name or yf_price_raw is None:
+    # Fallback to yahooquery if yfinance info is empty and Yahoo is not rate limited
+    if (not has_name or yf_price_raw is None) and not check_yahoo_rate_limited():
         logger.warning(f"yfinance info missing for {raw_sym}. Triggering yahooquery fallback...")
-        yq_info = fetch_yahooquery_fallback(raw_sym)
-        info = {**info, **yq_info}
-        has_name = info.get("shortName") or info.get("longName") or info.get("symbol")
-        yf_price_raw = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
+        try:
+            yq_info = fetch_yahooquery_fallback(raw_sym)
+            info = {**info, **yq_info}
+            has_name = info.get("shortName") or info.get("longName") or info.get("symbol")
+            yf_price_raw = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
+        except Exception as e:
+            logger.warning(f"yahooquery fallback failed: {e}")
+            if is_rate_limit_exception(e):
+                mark_yahoo_rate_limited()
         
         if not has_name or yf_price_raw is None:
             logger.warning(f"Yahoo Finance APIs blocked/failed for {raw_sym}. Triggering Screener.in fallback...")
@@ -110,8 +156,12 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
                     info["shortName"] = scr_data["name"]
                     info["longName"] = scr_data["name"]
                     info["symbol"] = raw_sym
-                    info["currentPrice"] = scr_data["current_price"]
-                    info["previousClose"] = scr_data["current_price"]
+                    current_price = scr_data["current_price"]
+                    change_pct = scr_data.get("change_pct", 0.0)
+                    prev_close = current_price / (1.0 + (change_pct / 100.0)) if change_pct else current_price
+                    
+                    info["currentPrice"] = current_price
+                    info["previousClose"] = prev_close
                     info["marketCap"] = scr_data.get("market_cap", 0) * 10000000
                     info["trailingPE"] = scr_data.get("pe")
                     info["returnOnEquity"] = scr_data.get("roe", 0) / 100.0 if scr_data.get("roe") else None
@@ -348,21 +398,15 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
 
 def fetch_screener_enrichment(symbol: str) -> Dict[str, Any]:
     """Fetches key 1Yr and 5Yr growth metrics, ratios, and Shareholding Pattern from Screener.in."""
-    import requests
     from bs4 import BeautifulSoup
+    from backend.utils import get_screener_html
 
-    clean_sym = symbol.replace('.NS', '').replace('.BO', '')
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
-    url = f'https://www.screener.in/company/{clean_sym}/consolidated/'
+    html_text = get_screener_html(symbol)
+    if not html_text:
+        return {}
     
     try:
-        res = requests.get(url, headers=headers, timeout=4)
-        if res.status_code != 200:
-            res = requests.get(f'https://www.screener.in/company/{clean_sym}/', headers=headers, timeout=4)
-        if res.status_code != 200:
-            return {}
-        
-        soup = BeautifulSoup(res.text, 'html.parser')
+        soup = BeautifulSoup(html_text, 'html.parser')
         enrichment = {}
 
         # 1. Top ratios
