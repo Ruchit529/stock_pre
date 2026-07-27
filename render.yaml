@@ -10,7 +10,7 @@ services:
     plan: free
 
   - type: web
-    name: stock-frontend
+    name: stock-react-frontend
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
