@@ -275,33 +275,46 @@ TRENDING_FEATURED_SYMBOLS = [
 
 FEATURED_CACHE: List[Dict[str, Any]] = []
 _cache_lock = threading.Lock()
+_is_loading = False
+_loading_lock = threading.Lock()
 
 def load_featured_stocks_data():
     """Background loader that pre-fetches trending stocks in parallel."""
-    global FEATURED_CACHE
-    logger.info("Pre-loading trending featured stocks cache in parallel...")
-    results = []
-    import time
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        futures = {}
-        for sym in TRENDING_FEATURED_SYMBOLS:
-            futures[executor.submit(fetch_company_data, sym)] = sym
-            time.sleep(0.5)
-        for future in as_completed(futures):
-            try:
-                res = future.result()
-                if res and res.get("symbol"):
-                    results.append(res)
-            except Exception as e:
-                logger.warning(f"Error fetching featured stock: {e}")
+    global FEATURED_CACHE, _is_loading
+    
+    with _loading_lock:
+        if _is_loading:
+            logger.info("Featured stocks cache loader already running. Skipping duplicate run.")
+            return
+        _is_loading = True
 
-    if results:
-        # Preserve original trending order
-        symbol_order = {sym.replace('.NS',''): i for i, sym in enumerate(TRENDING_FEATURED_SYMBOLS)}
-        results.sort(key=lambda x: symbol_order.get(x.get("symbol", "").replace('.NS',''), 99))
-        with _cache_lock:
-            FEATURED_CACHE = results
-        logger.info(f"Successfully cached {len(FEATURED_CACHE)} trending featured stocks.")
+    try:
+        logger.info("Pre-loading trending featured stocks cache in parallel...")
+        results = []
+        import time
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            futures = {}
+            for sym in TRENDING_FEATURED_SYMBOLS:
+                futures[executor.submit(fetch_company_data, sym)] = sym
+                time.sleep(0.5)
+            for future in as_completed(futures):
+                try:
+                    res = future.result()
+                    if res and res.get("symbol"):
+                        results.append(res)
+                except Exception as e:
+                    logger.warning(f"Error fetching featured stock: {e}")
+
+        if results:
+            # Preserve original trending order
+            symbol_order = {sym.replace('.NS',''): i for i, sym in enumerate(TRENDING_FEATURED_SYMBOLS)}
+            results.sort(key=lambda x: symbol_order.get(x.get("symbol", "").replace('.NS',''), 99))
+            with _cache_lock:
+                FEATURED_CACHE = results
+            logger.info(f"Successfully cached {len(FEATURED_CACHE)} trending featured stocks.")
+    finally:
+        with _loading_lock:
+            _is_loading = False
 
 # Start background cache preloader on module import
 threading.Thread(target=load_featured_stocks_data, daemon=True).start()
@@ -314,7 +327,7 @@ def get_featured_stocks():
         if FEATURED_CACHE:
             return {"featured": FEATURED_CACHE}
 
-    # Fallback if cache not ready yet
-    load_featured_stocks_data()
-    return {"featured": FEATURED_CACHE}
+    # Fallback if cache not ready yet: start in background, do not block the request
+    threading.Thread(target=load_featured_stocks_data, daemon=True).start()
+    return {"featured": []}
 
