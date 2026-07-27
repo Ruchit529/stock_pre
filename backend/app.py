@@ -281,8 +281,12 @@ def load_featured_stocks_data():
     global FEATURED_CACHE
     logger.info("Pre-loading trending featured stocks cache in parallel...")
     results = []
-    with ThreadPoolExecutor(max_workers=min(16, len(TRENDING_FEATURED_SYMBOLS))) as executor:
-        futures = {executor.submit(fetch_company_data, sym): sym for sym in TRENDING_FEATURED_SYMBOLS}
+    import time
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        futures = {}
+        for sym in TRENDING_FEATURED_SYMBOLS:
+            futures[executor.submit(fetch_company_data, sym)] = sym
+            time.sleep(0.5)
         for future in as_completed(futures):
             try:
                 res = future.result()

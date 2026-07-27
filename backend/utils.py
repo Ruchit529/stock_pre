@@ -47,7 +47,12 @@ def fetch_screener_ratios(symbol: str) -> dict:
         cf_results = []
         shareholding = {}
 
-        # 1. Extract top key ratios
+        # 1. Extract name from h1
+        h1_el = soup.find('h1')
+        if h1_el:
+            ratios['name'] = h1_el.text.strip()
+
+        # 2. Extract top key ratios
         for li in soup.find_all('li', class_='flex'):
             name_el = li.find('span', class_='name')
             num_el = li.find('span', class_='number')
@@ -61,6 +66,7 @@ def fetch_screener_ratios(symbol: str) -> dict:
                     elif 'Stock P/E' in name: ratios['pe'] = val
                     elif 'Market Cap' in name: ratios['market_cap'] = val
                     elif 'Book Value' in name: ratios['book_value'] = val
+                    elif 'Current Price' in name: ratios['current_price'] = val
                 except ValueError:
                     pass
 

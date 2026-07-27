@@ -53,6 +53,10 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
     if not (raw_sym.endswith(".NS") or raw_sym.endswith(".BO")):
         raw_sym = f"{raw_sym}.NS"
 
+    annual_results = []
+    bs_results = []
+    cf_results = []
+
     logger.info(f"Fetching Yahoo Finance API data for {raw_sym}")
     ticker = yf.Ticker(raw_sym)
 
@@ -62,10 +66,29 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
         future_bs = executor.submit(lambda: ticker.balance_sheet)
         future_cf = executor.submit(lambda: ticker.cashflow)
 
-        info = future_info.result()
-        income_stmt = future_income.result()
-        balance_sheet = future_bs.result()
-        cashflow = future_cf.result()
+        try:
+            info = future_info.result()
+        except Exception as e:
+            logger.warning(f"yfinance info fetch failed: {e}")
+            info = {}
+            
+        try:
+            income_stmt = future_income.result()
+        except Exception as e:
+            logger.warning(f"yfinance financials fetch failed: {e}")
+            income_stmt = None
+            
+        try:
+            balance_sheet = future_bs.result()
+        except Exception as e:
+            logger.warning(f"yfinance balance sheet fetch failed: {e}")
+            balance_sheet = None
+            
+        try:
+            cashflow = future_cf.result()
+        except Exception as e:
+            logger.warning(f"yfinance cashflow fetch failed: {e}")
+            cashflow = None
 
     has_name = info.get("shortName") or info.get("longName") or info.get("symbol")
     yf_price_raw = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
@@ -79,7 +102,36 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
         yf_price_raw = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
         
         if not has_name or yf_price_raw is None:
-            raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE via Yahoo Finance API.")
+            logger.warning(f"Yahoo Finance APIs blocked/failed for {raw_sym}. Triggering Screener.in fallback...")
+            from backend.utils import fetch_screener_ratios
+            try:
+                scr_data = fetch_screener_ratios(raw_sym)
+                if scr_data and scr_data.get("name") and scr_data.get("current_price"):
+                    info["shortName"] = scr_data["name"]
+                    info["longName"] = scr_data["name"]
+                    info["symbol"] = raw_sym
+                    info["currentPrice"] = scr_data["current_price"]
+                    info["previousClose"] = scr_data["current_price"]
+                    info["marketCap"] = scr_data.get("market_cap", 0) * 10000000
+                    info["trailingPE"] = scr_data.get("pe")
+                    info["returnOnEquity"] = scr_data.get("roe", 0) / 100.0 if scr_data.get("roe") else None
+                    info["returnOnCapitalEmployed"] = scr_data.get("roce", 0) / 100.0 if scr_data.get("roce") else None
+                    info["debtToEquity"] = scr_data.get("de", 0) * 100.0 if scr_data.get("de") else None
+                    info["currentRatio"] = scr_data.get("current_ratio")
+                    info["interestCoverage"] = scr_data.get("interest_coverage")
+                    
+                    if scr_data.get("annual_results"):
+                        annual_results = scr_data["annual_results"]
+                    if scr_data.get("bs_results"):
+                        bs_results = scr_data["bs_results"]
+                        
+                    has_name = True
+                    yf_price_raw = scr_data["current_price"]
+                else:
+                    raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE and Screener.in fallback failed.")
+            except Exception as e:
+                logger.error(f"Screener.in fallback failed for {raw_sym}: {e}", exc_info=True)
+                raise HTTPException(status_code=404, detail=f"Stock ticker '{symbol}' was not found on NSE/BSE. Yahoo and Screener fallbacks failed: {str(e)}")
 
     current_price = float(yf_price_raw)
     prev_close = safe_float(info.get("previousClose") or info.get("regularMarketPreviousClose"), current_price)
@@ -112,9 +164,12 @@ def fetch_raw_financial_data(symbol: str) -> Tuple[Dict[str, Any], List[Dict[str
     revenue_raw = safe_float(info.get("totalRevenue"))
     industry_pe = None
 
-    annual_results = []
-    bs_results = []
-    cf_results = []
+    if not annual_results:
+        annual_results = []
+    if not bs_results:
+        bs_results = []
+    if not cf_results:
+        cf_results = []
     
     latest_op_inc = 0
     latest_interest_expense = 0
