@@ -1,587 +1,965 @@
 # IMPLEMENTATION.md
 
-# Stock Analysis Platform - Implementation Plan
+# STOCK ANALYSIS PLATFORM
+## PHASE-BY-PHASE IMPLEMENTATION PLAN
 
 ---
 
-# Development Strategy
+# 1. IMPLEMENTATION RULES
 
-The project will be built incrementally.
+## 1.1 Source of Truth
 
-Only **one phase** should be implemented at a time.
+The implementation must follow only:
 
-After each phase:
+1. `Stock_Analysis.md`
+2. `YOUTUBE MASTERCOURSE PDF.pdf`
+3. `PRD.md`
+4. `TECHSPEC.md`
+5. `APPFLOW.md`
+6. `DESIGN.md`
 
-1. Stop development.
-2. Wait for manual review.
-3. Fix any issues found.
-4. Receive approval.
-5. Only then begin the next phase.
+If a feature, metric, calculation, score, benchmark, screen, or business rule is not present in the approved source documents:
 
-Do not continue automatically.
-
----
-
-# Phase 1 — Project Setup & Foundation
-
-## Goal
-
-Set up the complete React project structure and design system.
-
-### Tasks
-
-- Initialize React project
-- Configure project structure
-- Create folder structure
-- Configure routing
-- Create reusable layout
-- Create Navbar
-- Create Sidebar
-- Create Footer
-- Add theme support
-- Implement responsive layout
-- Configure typography
-- Configure colors
-- Configure spacing system
-- Create reusable UI components
-- Add placeholder pages for all modules
-
-### Deliverables
-
-- Project structure
-- Navigation
-- Layout
-- Theme
-- Reusable Components
-
-### Manual Review
-
-Verify
-
-- Folder structure
-- Navigation
-- Responsiveness
-- Theme consistency
-- Component quality
-
-**STOP HERE**
-
-Wait for approval before starting Phase 2.
+- Do not invent it.
+- Do not implement it.
+- Do not assume it.
+- Do not add it because it is common in another stock-analysis application.
 
 ---
 
-# Phase 2 — Landing Page
+# 2. CURRENT DEVELOPMENT STATUS
 
-## Goal
+The project is currently being developed as:
 
-Create the application's landing page.
+> React Frontend First
 
-### Tasks
+The backend will be developed later using:
 
-Build
+> Python
 
-- Hero Section
-- Company Search UI
-- Featured Companies
-- Popular Sectors
-- Quick Navigation Cards
-- Recent Searches (Placeholder)
-- Coming Soon Modules
-- Footer
+Future Python APIs will provide data integration for the frontend.
 
-### Deliverables
+AI is a future possibility but is:
 
-Complete Landing Page
+> NOT part of the current implementation.
 
-### Manual Review
-
-Verify
-
-- Design
-- Responsive layout
-- Search UI
-- Overall user experience
-
-**STOP HERE**
-
-Wait for approval.
+Do not implement AI now.
 
 ---
 
-# Phase 3 — Company Search
+# 3. DEVELOPMENT APPROACH
+
+The application must be developed incrementally.
+
+Each phase must be completed and manually checked before moving to the next phase.
+
+## Mandatory Process
+
+```text
+Read Phase
+↓
+Implement Phase
+↓
+Run Application
+↓
+Check UI
+↓
+Check Responsive Layout
+↓
+Check Validation
+↓
+Check Edge Cases
+↓
+Fix Issues
+↓
+Manual User Verification
+↓
+Mark Phase COMPLETE
+↓
+Wait for Approval
+↓
+Start Next Phase
+
+Do NOT automatically continue to the next phase after completing a phase.
+
+4. PHASE 0 — PROJECT FOUNDATION
+Objective
+
+Prepare the React project for the Stock Analysis Platform.
+
+Tasks
+Verify React project structure.
+Establish reusable component structure.
+Establish page structure.
+Establish routing structure if required by the approved APPFLOW.
+Establish shared layout.
+Establish reusable UI components.
+Establish common typography.
+Establish common spacing.
+Establish common cards.
+Establish common tables.
+Establish common status indicators.
+Establish common score displays.
+Establish common loading states.
+Establish common error states.
+Establish common empty states.
+Follow DESIGN.md.
+Important
 
-## Goal
+Do not implement backend integration.
 
-Build company search experience.
+Use frontend mock/static data where necessary.
+
+Manual Check
 
-### Tasks
+Verify:
 
-- Search page
-- Search input
-- Search suggestions
-- Recent searches
-- Popular searches
-- Empty states
-- Loading state
-- Error state
+Application starts successfully.
+No console errors.
+Navigation works.
+Layout works on desktop.
+Layout works on smaller screens.
+Shared components render correctly.
+Completion
 
-(Currently using mock data.)
+Only mark Phase 0 COMPLETE after manual verification.
 
-### Deliverables
+5. PHASE 1 — APPLICATION SHELL & NAVIGATION
+Objective
 
-Complete Company Search screen.
+Build the common application structure and navigation.
 
-### Manual Review
+Tasks
 
-Verify
+Implement:
 
-- Search UX
-- Layout
-- Components
+Application header.
+Main navigation.
+Company context area.
+Page content area.
+Footer where required.
+Responsive navigation.
+Common page container.
+Consistent section structure.
 
-**STOP HERE**
+Navigation must follow the sequence defined in APPFLOW.md.
 
----
+The user must always understand:
 
-# Phase 4 — Company Overview
+Which company is being analyzed.
+Which analysis section is open.
+Where they are in the research process.
+What the next analysis step is.
+Manual Check
 
-## Goal
+Verify:
 
-Build the research report header.
+Navigation between pages.
+Back/forward flow.
+Responsive behavior.
+Company context remains clear.
+No broken routes.
+No unnecessary screens are added.
+6. PHASE 2 — COMPANY OVERVIEW
+Objective
 
-### Tasks
+Create the initial company context screen.
 
-Create
+Tasks
 
-- Company Hero
-- Company Description
-- Company Tags
-- Price Card
-- Quick Financial Snapshot
-- Company Information Cards
-- Navigation between sections
+Implement only information supported by the approved requirements.
 
-### Deliverables
+The screen should establish the company context before detailed analysis.
 
-Company Overview Page
+Where supported, display:
 
-### Manual Review
+Company name.
+Company description.
+Business context.
+Market capitalization.
+Other approved company overview information.
 
-Verify
+Include a clear transition to:
 
-- Information hierarchy
-- Card layout
-- Company description
-- Mobile responsiveness
+Business Analysis
 
-**STOP HERE**
+Manual Check
 
----
+Verify:
 
-# Phase 5 — Business Analysis
+Company information is clearly readable.
+Missing information does not break the UI.
+Layout works on desktop and mobile.
+Next-step navigation works.
+7. PHASE 3 — BUSINESS ANALYSIS
+Objective
 
-## Goal
+Implement the Business Analysis section.
 
-Build Business Analysis module.
+The source framework contains:
 
-### Tasks
+Overview
+Business Market Cap
+Peer Comparison
+Business Type
 
-- Business Overview
-- Business Model
-- Products
-- Services
-- Revenue Sources
-- Customer Segments
-- Business Type
-- Competitive Position
+Business Type contains:
 
-### Deliverables
+Product Based
+Service Based
+Asset Based
+Tasks
 
-Business Analysis page
+Create the required UI sections.
 
-### Manual Review
+Business Type must clearly distinguish the three source-defined categories.
 
-Verify
+Do not create additional business categories.
 
-- Card layout
-- Readability
-- Flow
+Manual Check
 
-**STOP HERE**
+Verify:
 
----
+Business information is easy to understand.
+Peer comparison layout is readable.
+Business types are clearly separated.
+No unsupported business metrics have been added.
+8. PHASE 4 — SECTOR ANALYSIS
+Objective
 
-# Phase 6 — Industry Analysis
+Implement Sector Analysis.
 
-## Goal
+Tasks
 
-Build Industry Analysis module.
+Implement:
 
-### Tasks
+Sector
+Cycle classification
+Cyclical
+Defensive
+Growth
+Sector allocation by market condition
+Tailwinds
+Risks
+Common sector-analysis mistakes
+Market Conditions
 
-- Industry Overview
-- Growth
-- Competition
-- Tailwinds
-- Headwinds
-- Industry Health
-- Industry Score
+Use the source-defined allocations:
 
-### Deliverables
+Bull Market
+Cyclical — 40%
+Growth — 30%
+Defensive — 30%
+Bear Market
+Defensive — 60%
+Growth — 30%
+Cyclical — 10%
+Normal Market
+Cyclical — 30%
+Growth — 30%
+Defensive — 40%
 
-Industry Analysis page
+Do not change these values.
 
-### Manual Review
+Manual Check
 
-Verify
+Verify:
 
-- Layout
-- Charts
-- Information grouping
+Sector classification works.
+Market-condition allocation is readable.
+Cyclical/Defensive/Growth sections are clearly separated.
+No unsupported sectors or rules are introduced.
+9. PHASE 5 — FUNDAMENTAL ANALYSIS: STAGE 1
+Objective
 
-**STOP HERE**
+Implement:
 
----
+Quick Screening / Gatekeeping
 
-# Phase 7 — Fundamental Analysis
+This is the first major scoring module.
 
-## Goal
+The source score is:
 
-Build Stage 1 Fundamental Analysis.
+10 points
 
-### Tasks
+For Banks/NBFCs:
 
-Create metric cards for
+9 points
 
-- Sales Growth
-- Profit Growth
-- OPM
-- ROE
-- ROCE
-- ROA
-- Debt
-- Current Ratio
-- Interest Coverage
-- PE
-- PB
+Tasks
 
-Include
+Implement the source-defined metrics:
 
-- Score Cards
-- Overall Score
-- Verdict
+Sales Growth
+Profit Growth
+OPM
+ROE
+ROCE
+Debt / Equity
+Current Ratio
+Interest Coverage
+P/E
+ROA
 
-### Deliverables
+For Banks/NBFCs, follow the source-defined exception for Debt / Equity.
 
-Complete Fundamental Analysis page
+UI Requirements
 
-### Manual Review
+Create:
 
-Verify
+Metric cards/table.
+Current value.
+Benchmark where supplied.
+Score.
+Status.
+Red-flag indication where applicable.
+Total score.
+Final verdict.
+Final Verdict
 
-- Score calculations (UI)
-- Layout
-- Cards
-- Progress indicators
+Use the source-defined categories:
 
-**STOP HERE**
+8.5+ — Exceptional
+7.5–8.5 — Excellent
+6.5–7.5 — Good
+<6.5 — Avoid
+Stage Gate
 
----
+Display:
 
-# Phase 8 — Deep Fundamental Analysis
+Proceed to Stage 2 only if Score ≥ 6.5
 
-## Goal
+Manual Check
 
-Build Stage 2 analysis.
+Verify:
 
-### Tasks
+All metrics render.
+Score calculation is consistent with source requirements.
+Banks/NBFC exception works.
+Verdict is correct.
+Red flags are visible.
+Missing data does not create fake scores.
+Responsive table/card layout works.
+10. PHASE 6 — FUNDAMENTAL ANALYSIS: STAGE 2
+Objective
 
-Create sections for
+Implement:
 
-- Quarterly Results
-- Profit & Loss
-- Balance Sheet
-- Cash Flow
-- Financial Ratios
-- Shareholding Pattern
+Deep Trend Analysis
 
-Use accordions and charts.
+The source defines six scoring categories:
 
-### Deliverables
+Quarterly Results — 2 points
+P&L Statement — 3 points
+Balance Sheet — 1 point
+Cash Flow — 1 point
+Ratios — 2 points
+Shareholding — 1 point
 
-Deep Analysis page
+Total:
 
-### Manual Review
+10 points
 
-Verify
+Tasks
 
-- Layout
-- Charts
-- Accordions
+Implement the source-defined trend analysis.
 
-**STOP HERE**
+Quarterly Results
 
----
+Show:
 
-# Phase 9 — Business Model & MOAT
+Sales YoY
+OPM YoY
+P&L
 
-## Goal
+Show:
 
-Build qualitative analysis module.
+Sales
+OPM
+Net Profit
+Balance Sheet
 
-### Tasks
+Show:
 
-Create
+Reserves
+Borrowings
+Cash Flow
 
-- Business Model
-- Revenue Model
-- Scalability
-- Brand Moat
-- Network Effect
-- Cost Advantage
-- Switching Cost
-- Regulatory Advantage
+Show:
 
-### Deliverables
+CFO
+Net Profit
+Debtor Days
+Ratios
 
-Business Quality page
+Show:
 
-### Manual Review
+ROE
+ROCE
+Shareholding
 
-Verify
+Show:
 
-- Cards
-- Icons
-- Layout
+Promoter
+Public
+FII
+DII
+Manual Check
 
-**STOP HERE**
+Verify:
 
----
+Historical trends render correctly.
+Trend states are understandable.
+Score breakdown is visible.
+Total score is visible.
+Missing historical periods are handled safely.
+No unsupported trend metric is added.
+11. PHASE 7 — BUSINESS MODEL ANALYSIS
+Objective
 
-# Phase 10 — Valuation
+Implement the qualitative Business Model framework.
 
-## Goal
+Tasks
 
-Build valuation module.
+Implement the three source-defined questions:
 
-### Tasks
+1. How does the company create value?
 
-Create
+Show:
 
-- PE
-- PEG
-- PB
-- DCF
-- Margin of Safety
+Product / Service
+Customer
+Problem Solved
+2. How does the company capture value?
 
-Include
+Show:
 
-- Gauge Charts
-- Comparison Cards
-- Valuation Summary
+How they charge
+Pricing Model
+Revenue Streams
+3. Is it scalable?
 
-### Deliverables
+Show:
 
-Valuation page
+Ability to grow without proportional cost increase.
+Asset Light
+Asset Heavy
+Business Models
 
-### Manual Review
+Implement only the models covered in the source:
 
-Verify
+Subscription Model
+Marketplace Model
+Manufacturing Model
+Asset Light vs Asset Heavy
+Freemium Model
+Manual Check
 
-- Visual hierarchy
-- Charts
-- Card design
+Verify:
 
-**STOP HERE**
+All sections are understandable.
+No invented business-model metrics.
+Asset Light and Asset Heavy are clearly distinguishable.
+Responsive layout works.
+12. PHASE 8 — ECONOMIC MOAT
+Objective
 
----
+Implement the source-defined MOAT framework.
 
-# Phase 11 — Technical Analysis
+MOAT Types
 
-## Goal
+Implement:
 
-Build Technical Analysis module.
+Brand Moat
+Network Effect Moat
+Cost Advantage Moat
+Switching Cost Moat
+Regulatory / Patent Moat
+MOAT Identification
 
-### Tasks
+Implement the five source-defined questions:
 
-Create
+Can competitors easily copy the business?
+Will this advantage last 10+ years?
+Has ROE been high and consistent for 10 years?
+Can the company raise prices without losing customers?
+Is market share stable or growing in 5 years?
 
-- Chart Placeholder
-- Trend
-- Support
-- Resistance
-- Momentum
-- Entry Zone
-- Exit Zone
-- Risk Reward
+Do not invent a MOAT score unless explicitly defined by the source.
 
-### Deliverables
+Manual Check
 
-Technical Analysis page
+Verify:
 
-### Manual Review
+Five MOAT categories appear.
+Five identification questions appear.
+No additional scoring system has been invented.
+13. PHASE 9 — VALUATION
+Objective
 
-Verify
+Implement the source-defined valuation section.
 
-- Layout
-- Readability
-- Chart placement
+Valuation Methods
 
-**STOP HERE**
+Implement:
 
----
+P/E Ratio
+PEG Ratio
+P/B Ratio
+DCF
+Margin of Safety
+P/E
 
-# Phase 12 — Portfolio Construction
+Show:
 
-## Goal
+Company P/E
+Industry P/E
+Comparison
+Fair Price concept
 
-Build Portfolio module.
+Source rule:
 
-### Tasks
+If company P/E is approximately 2x industry P/E, the stock is considered highly overvalued / generally avoided.
 
-Create
+PEG
 
-- Allocation Cards
-- Diversification
-- Sector Allocation
-- Position Size
-- Core vs Satellite
-- Portfolio Summary
+Show:
 
-### Deliverables
+PEG = P/E Ratio ÷ Earnings Growth Rate
 
-Portfolio page
+Source categories:
 
-### Manual Review
+<1 — Undervalued
+1–1.5 — Fair Valued
+1.5–2 — Getting Expensive
 
-Verify
+2 — Overvalued
 
-- Charts
-- Allocation cards
-- Layout
+P/B
 
-**STOP HERE**
+Show the source-defined usage and ranges for:
 
----
+Banks
+Manufacturing
+DCF
 
-# Phase 13 — Risk Management
+Show the source-level DCF concept.
 
-## Goal
+Do not build an advanced DCF system beyond the supplied methodology.
 
-Build Risk Management module.
+Margin of Safety
 
-### Tasks
+Show:
 
-Create
+Margin of Safety = (Fair Value − Current Price) ÷ Fair Value
 
-- Emergency Fund
-- Position Sizing
-- Debt Allocation
-- Psychology
-- Behaviour Rules
-- Common Mistakes
+Source rule:
 
-### Deliverables
+Invest only when price is at least 20% below fair value.
 
-Risk Management page
+Manual Check
 
-### Manual Review
+Verify:
 
-Verify
+Formulas are correct.
+Values are readable.
+Source-defined ranges are correct.
+No unsupported valuation method exists.
+DCF does not exceed source scope.
+14. PHASE 10 — ENTRY & EXIT STRATEGIES
+Objective
 
-- Checklist UI
-- Cards
-- Flow
+Implement the educational/reference content from the source.
 
-**STOP HERE**
+Entry Strategies
 
----
+Implement:
 
-# Phase 14 — Final Investment Verdict
+Lump Sum
+SIP
+Tranched Buying
 
-## Goal
+Show source-defined:
 
-Create the final summary page.
+Advantages
+Disadvantages
+When to use
+Exit Strategies
 
-### Tasks
+Implement the seven source-defined scenarios:
 
-Display
+Fundamentals Deteriorating
+Overvalued
+Better Opportunities Available
+Portfolio Rebalancing
+Goal Achieved
+Mistake Realized
+Emergency
+Manual Check
 
-- Business Score
-- Industry Score
-- Financial Score
-- Valuation Score
-- Technical Score
-- Overall Rating
-- Final Recommendation
+Verify:
 
-### Deliverables
+All three entry strategies appear.
+All seven exit scenarios appear.
+No trading execution functionality exists.
+No personalized buy/sell recommendation is generated.
+15. PHASE 11 — PORTFOLIO CONSTRUCTION
+Objective
 
-Final Verdict page
+Implement the source-defined portfolio construction reference.
 
-### Manual Review
+Tasks
 
-Verify
+Implement:
 
-- Summary
-- User experience
-- Navigation
+How many stocks
+Sector Diversification
+Position Sizing
+Core-Satellite Strategy
+Portfolio Rebalancing
+Common Mistakes
+Stock Count
 
-**STOP HERE**
+Display source-defined approaches:
 
----
+Concentrated — Max 5
+Focused — 6–10
+Balanced — Up to 25
+Sector Diversification
 
-# Phase 15 — Polish & Optimization
+Show:
 
-## Goal
+No single sector >20%
+Minimum 4–5 sectors
+Up to 8 sectors
+Avoid highly correlated sectors
+Position Sizing
 
-Prepare the frontend for backend integration.
+Show source-defined methods:
 
-### Tasks
+Equal Weightage
+Conviction Based Weightage
 
-- Improve responsiveness
-- Optimize components
-- Remove duplicate code
-- Improve accessibility
-- Add loading skeletons
-- Add empty states
-- Improve animations
-- Refactor reusable components
-- Replace hardcoded values with mock data files
+Do not silently resolve any source inconsistency.
 
-### Deliverables
+If a source value cannot be reconciled with another source value, flag it rather than inventing a conversion.
 
-Production-ready frontend
+Core-Satellite
 
-### Manual Review
+Show:
 
-Verify
+Core — 70–80%
+Satellite — 20–30%
+Manual Check
 
-- Overall UI/UX
-- Performance
-- Responsiveness
-- Code organization
+Verify:
 
-**STOP HERE**
+All source-defined portfolio concepts appear.
+No holdings ledger is created unless explicitly approved.
+No broker integration exists.
+No order execution exists.
+16. PHASE 12 — INVESTOR PSYCHOLOGY & RISK MANAGEMENT
+Objective
 
----
+Implement the source-defined educational content.
 
-# Future Phases (Not in Current Scope)
+Psychology
 
-These phases will begin only after the frontend is fully approved.
+Show:
 
-- Python Backend Development
-- Database Integration
-- REST API Development
-- Financial Data Integration
-- Authentication
-- User Accounts
-- Portfolio Sync
-- Watchlist
-- AI Integration
-- AI Company Summary
-- AI Investment Insights
-- Live Stock Data
-- Notifications
+Fear
+Greed
+FOMO
+Panic
+Overconfidence
+Regret
+Risk Management
 
-These phases require a separate implementation plan.
+Show source-defined concepts including:
+
+Emergency Fund
+Debt Allocation
+Position Sizing
+Mental / Technical Stop Loss
+Avoid acting on news
+Discipline Framework
+
+Implement the source-defined Investment Policy Statement structure where required:
+
+Goals
+Risk Profile
+Investment Strategy
+Entry / Exit Rules
+Behavioural Rules
+Market Crash Protocol
+Continuous Learning
+Manual Check
+
+Verify:
+
+Content is informational.
+No personalized financial advice is generated.
+No unsupported psychological rules are added.
+17. PHASE 13 — STOCK MARKET MATHEMATICS
+Objective
+
+Implement the source-defined educational mathematics section where included in the approved application flow.
+
+Source Concepts
+
+Show:
+
+Capital
+Time
+Rate
+Psychology
+Tax
+Mistake Cost
+Time in the Market
+Compounding
+Inflation
+Nominal Returns
+Real Returns
+
+Do not add unrelated calculators.
+
+Manual Check
+
+Verify:
+
+Calculations, if implemented, match the source.
+No unsupported financial-planning functionality is added.
+18. PHASE 14 — COMMON COMPONENT REFINEMENT
+Objective
+
+After major screens are implemented, consolidate reusable UI components.
+
+Tasks
+
+Review and standardize:
+
+Cards
+Tables
+Metric rows
+Score cards
+Status indicators
+Trend indicators
+Section headers
+Navigation
+Empty states
+Error states
+Loading states
+Responsive tables
+Tooltips/explanations where supported
+
+Remove duplicate implementations.
+
+Manual Check
+
+Verify that changing a shared component does not break other screens.
+
+19. PHASE 15 — VALIDATION & EDGE CASES
+Objective
+
+Ensure the application does not break when data is incomplete or invalid.
+
+Required Cases
+
+Test:
+
+No company selected.
+Invalid company.
+Company not found.
+Missing company information.
+Missing financial data.
+Missing annual data.
+Missing quarterly data.
+Missing valuation data.
+Limited historical data.
+Bank/NBFC.
+Non-bank company.
+Empty results.
+Invalid values.
+Loading state.
+API-unavailable placeholder state.
+Error state.
+Very large numbers.
+Negative values.
+Long company names.
+Long business descriptions.
+Mobile screen width.
+Tablet screen width.
+Rules
+
+Never use fake financial values to hide missing data.
+
+Never let missing data crash the application.
+
+Use a clear unavailable-data state.
+
+20. PHASE 16 — RESPONSIVE & CROSS-SCREEN TESTING
+Objective
+
+Perform a complete frontend UI check.
+
+Test
+Desktop
+Navigation
+Tables
+Charts/trends
+Scorecards
+Cards
+Long content
+Tablet
+Navigation
+Tables
+Cards
+Spacing
+Horizontal scrolling
+Mobile
+Navigation
+Tables
+Cards
+Scorecards
+Long text
+Company context
+Buttons
+Manual Check
+
+Every screen must be manually reviewed at all supported responsive sizes.
+
+21. PHASE 17 — FRONTEND QUALITY CHECK
+Objective
+
+Complete frontend quality verification before backend integration.
+
+Check
+No console errors.
+No broken routes.
+No broken components.
+No unnecessary duplicated code.
+No unused major components.
+No hardcoded fake financial information presented as real data.
+No unsupported features.
+No AI functionality.
+No brokerage functionality.
+No order execution.
+No unsupported technical indicators.
+No source-rule modifications.
+22. PHASE 18 — PYTHON BACKEND PREPARATION
+IMPORTANT
+
+This phase is future work.
+
+Do not implement the Python backend during the current frontend-only development stage unless explicitly instructed.
+
+When backend development begins, it will use:
+
+Python
+
+The React frontend should be structured so that mock/static data can later be replaced with API responses without redesigning the UI.
+
+Future integration should follow:
+
+Python Backend
+↓
+API
+↓
+React Frontend
+
+The frontend should not be tightly coupled to mock data.
+
+23. PHASE 19 — DATA INTEGRATION
+FUTURE PHASE
+
+When Python backend development starts, integrate the approved data sources through the backend.
+
+The frontend should consume APIs rather than directly depending on external data providers.
+
+Do not implement this phase during the current frontend-only build unless explicitly instructed.
+
+24. PHASE 20 — FUTURE AI
+FUTURE ONLY
+
+AI may be considered later.
+
+AI is NOT part of the current build.
+
+Do not implement:
+
+AI chatbot
+AI stock analysis
+AI scoring
+AI recommendations
+AI explanations
+AI sentiment analysis
+25. PHASE COMPLETION RULE
+
+A phase is considered COMPLETE only when:
+
+Implementation is finished.
+Application runs.
+Manual UI verification is completed.
+Responsive behavior is checked.
+Validation is checked.
+Edge cases are checked.
+No critical errors remain.
+The user confirms the phase.
+
+Only after user confirmation may the next phase begin.
+
+26. STOP RULE
+
+After completing every phase:
+
+STOP.
+
+Do not automatically start the next phase.
+
+Wait for the user to manually check the implementation and explicitly instruct:
+
+NEXT
+
+Only then proceed to the next phase.
+
+27. IMPLEMENTATION TRACKING
+
+Update TRACKER.md after each completed phase.
+
+Use:
+
+TODO
+IN PROGRESS
+COMPLETE
+BLOCKED
+
+Track both:
+
+Phase progress
+Individual implementation tasks
+
+Do not mark a task COMPLETE merely because code was written.
+
+It must also pass manual verification.
+
+28. FINAL IMPLEMENTATION PRINCIPLE
+
+The developer must continuously ask:
+
+"Is this requirement actually present in the approved source material?"
+
+If YES:
+
+Implement it.
+
+If NO:
+
+Do not implement it.
+
+If unclear:
+
+Stop and flag it for review rather than inventing functionality.
+
+The goal is not to build a generic stock-analysis application.
+
+The goal is to build the Stock Analysis Platform according to the supplied source framework, while keeping the current implementation focused on the React frontend and leaving Python backend/API integration for the future.

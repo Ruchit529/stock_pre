@@ -1,420 +1,263 @@
 # TECHSPEC.md
 
-# Technical Specification
+# Stock Analysis Platform
+## Technical Specification
 
 ---
 
-# Project Overview
+# 1. Document Purpose
 
-Stock Analysis Platform is a frontend-first web application that provides a structured workflow for analyzing stocks through business analysis, sector analysis, fundamental analysis, valuation, technical analysis, portfolio construction, and risk management.
+This document defines the technical architecture and technology requirements for the Stock Analysis Platform.
 
-The current phase focuses entirely on frontend development.
+The technical implementation must support the stock-analysis framework defined in:
 
-Backend services and AI capabilities will be introduced in future phases.
+- Stock_Analysis.md
+- YOUTUBE_MASTERCOURSE_PDF.pdf
 
----
-
-# Current Project Architecture
-
-Current Architecture
-
-```
-User
-    │
-    ▼
-React Frontend
-```
-
-Current Version
-
-- Frontend Only
-- No Backend
-- No Authentication
-- No Database
-- No API Integration
-- Static / Mock Data
+The technical architecture must not introduce additional investment-analysis methodology, scoring rules, metrics, or benchmarks that are not present in the source framework.
 
 ---
 
-# Planned Future Architecture
+# 2. Product Type
 
-Future Architecture
+Application Type:
 
-```
-User
-        │
-        ▼
-React Frontend
-        │
-REST API
-        │
-Python Backend
-        │
+- Responsive Web Application
+- Stock Research & Analysis Platform
+- Indian Equity Market Focus
+- NSE/BSE Listed Companies
+
+The platform is a research and structured-analysis application.
+
+It is NOT:
+
+- A broker
+- A trading execution platform
+- An intraday trading platform
+- An order-placement platform
+
+The platform must not execute trades.
+
+---
+
+# 3. Current Development Stage
+
+## Current
+
+The project is currently being developed as a React frontend.
+
+The frontend may use:
+
+- Mock data
+- Static data
+- Local development data
+
+until the backend is implemented.
+
+## Future
+
+The backend will be developed using Python and FastAPI.
+
+The future architecture will connect:
+
+React
+↓
+FastAPI
+↓
 Database
-        │
-AI Services
-```
+↓
+Background Data Collection
+↓
+External Financial Data Sources
 
-The architecture has been planned to allow seamless backend integration without changing the frontend structure.
+AI is NOT part of the current implementation.
+
+AI-generated analysis, AI scoring, AI recommendations, chatbot functionality, and AI investment assistants must not be added.
 
 ---
 
-# Current Technology Stack
+# 4. Technology Stack
 
 ## Frontend
 
-Framework
+Use:
 
 - React
+- JavaScript / TypeScript according to the existing project setup
+- React Router for application navigation
+- Reusable React components
+- Responsive web layout
 
-Purpose
-
-- User Interface
-- Routing
-- State Management
-- Component Rendering
-- Responsive Design
+The frontend should remain modular and API-ready.
 
 ---
 
-## Styling
+# 5. Backend — Future
 
-The frontend should follow the design system defined in DESIGN.md.
+The backend will be implemented using:
 
----
+- Python
+- FastAPI
+- Uvicorn / Gunicorn for application serving
 
-## Charts
+The backend will expose REST APIs to the React frontend.
 
-Charts should support displaying
+The backend will be responsible for:
 
-- Revenue Trend
-- Profit Trend
-- Quarterly Growth
-- Financial Ratios
-- Portfolio Allocation
-- Technical Analysis
-
-Chart library has not been finalized.
-
----
-
-## Data
-
-Current version uses
-
-- Static Data
-- Mock JSON
-- Dummy API Responses (if required)
-
-No live market integration.
+- Data retrieval from the database
+- Company information
+- Financial information
+- Financial ratios
+- Stage 1 calculations
+- Stage 2 calculations
+- Valuation calculations
+- Search
+- Comparison
+- Watchlist
+- Dashboard
+- Admin functionality
 
 ---
 
-# Backend (Future)
+# 6. Database — Future
 
-Backend technology
+Use a relational database.
 
-Python
+Recommended database:
 
-Responsibilities
+- PostgreSQL
 
-- Business Logic
-- Data Processing
-- API Development
-- User Management
-- AI Integration
-- Database Communication
-- Financial Calculations
+The database will act as the normalized source of truth for application data.
 
-Backend is not part of the current implementation.
+It should store:
 
----
-
-# Database (Future)
-
-Database has not been finalized.
-
-The database should support storing
-
-- Companies
-- Financial Statements
-- Industry Information
-- User Data
-- Saved Analysis
-- Portfolio
-- Watchlists
-- AI Results
-
-Database implementation will be planned during backend development.
-
----
-
-# Authentication (Future)
-
-Authentication is not included in the current version.
-
-Future versions may support
-
-- User Registration
-- Login
-- Profile Management
-- Saved Analysis
-- Personalized Dashboard
-
-Authentication technology has not yet been decided.
-
----
-
-# AI Integration (Future)
-
-Artificial Intelligence is planned for future releases.
-
-Possible capabilities
-
-- Company Summary
-- Business Explanation
-- Fundamental Analysis Summary
-- AI Insights
-- Investment Explanation
-- Risk Summary
-- Portfolio Suggestions
-
-These features are outside the scope of the current version.
-
----
-
-# External APIs (Future)
-
-The application may integrate with financial data providers in future versions.
-
-Possible data categories
-
-- Company Information
-- Financial Statements
+- Company information
+- Sector information
+- Business information
+- Financial statements
+- Quarterly results
+- Annual results
+- Balance Sheet
+- Cash Flow
+- Financial ratios
 - Shareholding
-- Ratios
-- Historical Prices
-- Industry Data
-- News
-
-API provider has not yet been selected.
-
----
-
-# Application Modules
-
-Current modules
-
-- Landing Page
-- Company Search
-- Company Overview
-- Business Analysis
-- Sector Analysis
-- Fundamental Analysis
-- Deep Fundamental Analysis
-- Business Model Analysis
-- Economic Moat Analysis
-- Valuation
-- Technical Analysis
-- Portfolio Construction
-- Risk Management
-- Glossary
-
----
-
-# Folder Structure (Suggested)
-
-```
-src/
-│
-├── assets/
-├── components/
-│
-├── layouts/
-│
-├── pages/
-│   ├── Home
-│   ├── Company
-│   ├── Business
-│   ├── Industry
-│   ├── Fundamentals
-│   ├── DeepAnalysis
-│   ├── Valuation
-│   ├── Technical
-│   ├── Portfolio
-│   └── Settings
-│
-├── data/
-│
-├── hooks/
-│
-├── utils/
-│
-├── services/
-│
-├── styles/
-│
-└── App
-```
-
----
-
-# Coding Guidelines
-
-Frontend
-
-- Reusable Components
-- Modular Architecture
-- Responsive Design
-- Consistent Naming
-- Clean Folder Structure
-- Separation of UI and Business Logic
-
----
-
-# Performance Goals
-
-The application should
-
-- Load quickly
-- Support responsive layouts
-- Reuse components
-- Minimize unnecessary rendering
-- Be scalable for future backend integration
-
----
-
-# Browser Support
-
-Support modern browsers including
-
-- Chrome
-- Edge
-- Firefox
-- Safari
-
----
-
-# Responsive Support
-
-- Desktop
-- Tablet
-- Mobile
-
----
-
-# Future Scalability
-
-The project architecture should support adding
-
-- Python Backend
-- Database
-- Authentication
-- AI Services
-- Portfolio Tracking
+- Historical data
+- Valuation inputs
+- Calculated scores
 - Watchlists
-- Live Stock Data
-- User Profiles
-- Notifications
+- User information
+- Data-source metadata
+- Refresh information
+- Validation / conflict information
+- Audit information
 
-without requiring major frontend redesign.
-
----
-
-# Out of Scope (Current Version)
-
-The following are intentionally excluded from the current implementation
-
-- Backend Development
-- Database
-- Authentication
-- Live Stock APIs
-- AI Analysis
-- Portfolio Synchronization
-- User Accounts
-- Notifications
-- Payment System
-
-# Planned Future Architecture
-
-Future Architecture
-
-```
-                User
-                  │
-                  ▼
-          React Frontend
-                  │
-          REST API / HTTP
-                  │
-          Python Backend API
-                  │
-        ┌─────────┴─────────┐
-        ▼                   ▼
-   Database          AI Services
-```
-
-The React frontend will communicate with the Python backend through REST APIs.
-
-The Python backend will act as the central service responsible for business logic, financial calculations, AI integration, and data retrieval.
+Detailed database instructions will be defined separately in `SCHEMA.md`.
 
 ---
 
-# Python API Integration (Future)
+# 7. Cache — Future
 
-The frontend is designed to integrate with a Python backend in future phases.
+Use:
 
-The Python backend APIs will provide data for:
+- Redis
 
-- Company Information
-- Business Overview
-- Industry Details
-- Financial Statements
-- Financial Ratios
-- Fundamental Analysis
-- Deep Fundamental Analysis
-- Technical Analysis Data
-- Historical Price Data
-- Peer Comparison
-- Portfolio Data
-- Watchlists
-- User Data
-- AI-generated Insights
-- AI-generated Company Summary
-- Saved Analysis
+Redis should be used as a cache layer for frequently requested data.
 
-All dynamic data displayed in the React application will eventually be fetched from these Python APIs.
+The cache should not become the primary source of truth.
 
-The frontend architecture should remain modular so static/mock data can be replaced with API responses with minimal changes.
+Primary source:
+
+PostgreSQL
+
+Cache:
+
+Redis
 
 ---
 
-# Data Integration
+# 8. Authentication — Future
 
-## Current Version
+The future backend should use:
 
-- Static JSON
-- Mock Data
-- Local Data Files
+- JWT-based authentication
+- Role-based access control
 
-## Future Version
+User types:
 
-Data will be fetched from Python APIs.
+- Guest / Anonymous User
+- Registered Investor User
+- Admin User
 
-Typical flow:
+Authentication is a future backend feature.
 
-```
-React Frontend
-        │
-HTTP Request
-        │
-Python REST API
-        │
-Financial Data Sources / Database / AI
-        │
-JSON Response
-        │
-React UI
-```
+Do not build fake authentication logic in the current frontend-only phase.
 
-The frontend should separate UI components from data-fetching logic to simplify future API integration.
+The frontend should nevertheless be structured so authentication can be integrated later without major architectural changes.
+
+---
+
+# 9. Authorization
+
+The backend should enforce authorization.
+
+At minimum:
+
+## Guest
+
+Can access publicly available research functionality permitted by the application.
+
+## Registered Investor
+
+Can use user-specific functionality such as Watchlist.
+
+## Admin
+
+Can access administrative functionality such as:
+
+- Data refresh
+- Failed jobs
+- Data conflicts
+- Reference data
+- Sector classification
+- Benchmark reference information
+- Audit information
+- User administration
+
+Authorization must be enforced on the backend.
+
+Frontend route protection alone must never be considered sufficient security.
+
+---
+
+# 10. System Architecture
+
+The future architecture should follow:
+
+```text
+                    External Data Sources
+                           │
+                 ┌─────────┴─────────┐
+                 │                   │
+           Yahoo Finance        Screener.in
+                 │                   │
+                 └─────────┬─────────┘
+                           │
+                           ▼
+                 Background Collector
+                           │
+                   Validation / Merge
+                           │
+                           ▼
+                     PostgreSQL
+                           │
+                           ▼
+                 Deterministic Engine
+                           │
+                           ▼
+                    Redis Cache
+                           │
+                           ▼
+                       FastAPI
+                           │
+                           ▼
+                    React Frontend
