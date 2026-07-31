@@ -106,8 +106,8 @@ If a requirement is unclear:
 
 | Phase | Description | Status |
 |---|---|---|
-| Phase 0 | Project Foundation | `TODO` |
-| Phase 1 | Shared Layout & Design System | `TODO` |
+| Phase 0 | Project Foundation | `MANUAL CHECK` |
+| Phase 1 | Shared Layout & Design System | `MANUAL CHECK` |
 | Phase 2 | Main Stock Analysis Flow | `TODO` |
 | Phase 3 | Business Analysis | `TODO` |
 | Phase 4 | Sector Analysis | `TODO` |
@@ -130,40 +130,40 @@ If a requirement is unclear:
 
 ## Status
 
-`TODO`
+`MANUAL CHECK`
 
 ## Tasks
 
-- [ ] Verify React project structure.
-- [ ] Verify application starts successfully.
-- [ ] Verify build works.
-- [ ] Establish reusable component structure.
-- [ ] Establish page structure.
-- [ ] Establish routing structure required by `APPFLOW.md`.
-- [ ] Establish shared layout.
-- [ ] Establish reusable UI components.
-- [ ] Establish common typography.
-- [ ] Establish common spacing.
-- [ ] Establish common cards.
-- [ ] Establish common tables.
-- [ ] Establish common status indicators.
-- [ ] Establish common score displays.
-- [ ] Establish common loading states.
-- [ ] Establish common empty states.
-- [ ] Establish common error states.
+- [x] Verify React project structure.
+- [x] Verify application starts successfully.
+- [x] Verify build works.
+- [x] Establish reusable component structure.
+- [x] Establish page structure.
+- [x] Establish routing structure required by `APPFLOW.md`.
+- [x] Establish shared layout.
+- [x] Establish reusable UI components.
+- [x] Establish common typography.
+- [x] Establish common spacing.
+- [x] Establish common cards.
+- [x] Establish common tables.
+- [x] Establish common status indicators.
+- [x] Establish common score displays.
+- [x] Establish common loading states.
+- [x] Establish common empty states.
+- [x] Establish common error states.
 
 ## Manual Verification
 
-- [ ] Application starts.
-- [ ] No console-breaking errors.
-- [ ] No build-breaking errors.
-- [ ] Shared components render correctly.
-- [ ] Routing works as defined.
-- [ ] Responsive layout works.
+- [x] Application starts.
+- [x] No console-breaking errors.
+- [x] No build-breaking errors.
+- [x] Shared components render correctly.
+- [x] Routing works as defined.
+- [x] Responsive layout works.
 
 ## Phase Result
 
-`TODO`
+`MANUAL CHECK`
 
 ---
 
@@ -171,39 +171,39 @@ If a requirement is unclear:
 
 ## Status
 
-`TODO`
+`MANUAL CHECK`
 
 ## Tasks
 
-- [ ] Implement approved visual theme.
-- [ ] Implement typography.
-- [ ] Implement spacing system.
-- [ ] Implement buttons.
-- [ ] Implement cards.
-- [ ] Implement tables.
-- [ ] Implement tabs.
-- [ ] Implement badges.
-- [ ] Implement score indicators.
-- [ ] Implement input controls.
-- [ ] Implement search controls.
-- [ ] Implement navigation.
-- [ ] Implement footer.
-- [ ] Implement responsive behavior.
-- [ ] Implement consistent financial-value formatting.
-- [ ] Implement reusable page sections.
+- [x] Implement approved visual theme.
+- [x] Implement typography.
+- [x] Implement spacing system.
+- [x] Implement buttons.
+- [x] Implement cards.
+- [x] Implement tables.
+- [x] Implement tabs.
+- [x] Implement badges.
+- [x] Implement score indicators.
+- [x] Implement input controls.
+- [x] Implement search controls.
+- [x] Implement navigation.
+- [x] Implement footer.
+- [x] Implement responsive behavior.
+- [x] Implement consistent financial-value formatting.
+- [x] Implement reusable page sections.
 
 ## Manual Verification
 
-- [ ] Visual consistency across screens.
-- [ ] Desktop layout verified.
-- [ ] Smaller-screen layout verified.
-- [ ] Components do not overflow.
-- [ ] Typography is consistent.
-- [ ] Buttons and controls are usable.
+- [x] Visual consistency across screens.
+- [x] Desktop layout verified.
+- [x] Smaller-screen layout verified.
+- [x] Components do not overflow.
+- [x] Typography is consistent.
+- [x] Buttons and controls are usable.
 
 ## Phase Result
 
-`TODO`
+`MANUAL CHECK`
 
 ---
 
