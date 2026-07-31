@@ -18,7 +18,45 @@ def safe_float(val: Any, default = None):
         return default
 
 
+import time
 import bs4
+
+# Short-lived cache for Screener.in HTML responses to avoid duplicate calls
+SCREENER_HTML_CACHE = {} # ticker -> (timestamp, html_str)
+SCREENER_CACHE_EXPIRY = 300 # 5 minutes
+
+def get_screener_html(symbol: str) -> str:
+    """Helper to fetch Screener.in HTML with caching."""
+    ticker = symbol.strip().upper()
+    if ticker.endswith(".NS") or ticker.endswith(".BO"):
+        ticker = ticker[:-3]
+        
+    now = time.time()
+    if ticker in SCREENER_HTML_CACHE:
+        ts, html_str = SCREENER_HTML_CACHE[ticker]
+        if now - ts < SCREENER_CACHE_EXPIRY:
+            logger.info(f"Returning cached Screener.in HTML for {ticker}")
+            return html_str
+
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+    url = f"https://www.screener.in/company/{ticker}/consolidated/"
+    
+    try:
+        resp = HTTP_SESSION.get(url, headers=headers, timeout=8)
+        if resp.status_code != 200:
+            url = f"https://www.screener.in/company/{ticker}/"
+            resp = HTTP_SESSION.get(url, headers=headers, timeout=8)
+            
+        if resp.status_code == 200:
+            html_str = resp.text
+            SCREENER_HTML_CACHE[ticker] = (now, html_str)
+            return html_str
+        else:
+            logger.warning(f"Screener.in fetch failed for {ticker}: HTTP {resp.status_code}")
+            return ""
+    except Exception as e:
+        logger.warning(f"Screener.in request error for {ticker}: {e}")
+        return ""
 
 def fetch_screener_ratios(symbol: str) -> dict:
     """Tier 3 Data Enrichment: Scrapes Screener.in for accurate Indian stock ratios and statements using BeautifulSoup.
@@ -27,27 +65,51 @@ def fetch_screener_ratios(symbol: str) -> dict:
     if ticker.endswith(".NS") or ticker.endswith(".BO"):
         ticker = ticker[:-3]
     
-    url = f"https://www.screener.in/company/{ticker}/consolidated/"
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+    html_text = get_screener_html(symbol)
+    if not html_text:
+        return {}
     
     try:
-        resp = HTTP_SESSION.get(url, headers=headers, timeout=8)
-        if resp.status_code != 200:
-            url = f"https://www.screener.in/company/{ticker}/"
-            resp = HTTP_SESSION.get(url, headers=headers, timeout=8)
-        
-        if resp.status_code != 200:
-            logger.warning(f"Screener.in fetch failed for {ticker}: HTTP {resp.status_code}")
-            return {}
-        
-        soup = bs4.BeautifulSoup(resp.text, 'html.parser')
+        soup = bs4.BeautifulSoup(html_text, 'html.parser')
         ratios = {}
         annual_results = []
         bs_results = []
         cf_results = []
         shareholding = {}
 
-        # 1. Extract top key ratios
+        # 1. Extract name from h1
+        h1_el = soup.find('h1')
+        if h1_el:
+            ratios['name'] = h1_el.text.strip()
+
+        # Extract daily price change percentage from the up/down span
+        change_pct = 0.0
+        change_span = soup.find('span', class_=lambda c: c and ('up' in c or 'down' in c) and 'margin-left-4' in c)
+        if not change_span:
+            # Fallback to any span with class 'up' or 'down' that contains numeric characters
+            for span in soup.find_all('span', class_=lambda c: c and ('up' in c or 'down' in c)):
+                span_text = span.text.strip()
+                if '%' in span_text or any(char.isdigit() for char in span_text):
+                    change_span = span
+                    break
+
+        if change_span:
+            txt = change_span.text.strip().replace('%', '')
+            try:
+                val = float(txt)
+                # BS4 class matching can return a list or a space-separated string
+                classes = change_span.get('class', [])
+                if isinstance(classes, str):
+                    classes = classes.split()
+                if 'down' in classes:
+                    change_pct = -val
+                else:
+                    change_pct = val
+            except ValueError:
+                pass
+        ratios['change_pct'] = change_pct
+
+        # 2. Extract top key ratios
         for li in soup.find_all('li', class_='flex'):
             name_el = li.find('span', class_='name')
             num_el = li.find('span', class_='number')
@@ -61,6 +123,7 @@ def fetch_screener_ratios(symbol: str) -> dict:
                     elif 'Stock P/E' in name: ratios['pe'] = val
                     elif 'Market Cap' in name: ratios['market_cap'] = val
                     elif 'Book Value' in name: ratios['book_value'] = val
+                    elif 'Current Price' in name: ratios['current_price'] = val
                 except ValueError:
                     pass
 

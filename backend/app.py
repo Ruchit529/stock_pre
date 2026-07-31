@@ -194,36 +194,61 @@ PEER_CACHE: Dict[str, List[Dict[str, Any]]] = {}
 
 def _fetch_single_peer(peer_sym: str) -> Dict[str, Any] | None:
     """Fetch lightweight metrics for a single peer ticker."""
+    from backend.services.data_service import check_yahoo_rate_limited
+    from backend.utils import fetch_screener_ratios
+
+    # Try Yahoo Finance first if not rate limited
+    if not check_yahoo_rate_limited():
+        try:
+            ticker = yf.Ticker(peer_sym)
+            info = ticker.info or {}
+            name = info.get("longName") or info.get("shortName")
+            if name:
+                price = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
+                if price is not None:
+                    mcap_raw = safe_float(info.get("marketCap"), 0)
+                    revenue_raw = safe_float(info.get("totalRevenue"), 0)
+                    opm_val = safe_float(info.get("operatingMargins"), 0) * 100
+                    roe_val = safe_float(info.get("returnOnEquity"), 0) * 100
+                    pe = safe_float(info.get("trailingPE") or info.get("forwardPE"), 0)
+
+                    return {
+                        "symbol": peer_sym,
+                        "name": name,
+                        "currentPrice": round(float(price), 2),
+                        "marketCap": round(mcap_raw / 10000000, 2),   # Crores
+                        "revenue": round(revenue_raw / 10000000, 2),   # Crores
+                        "opm": round(opm_val, 1),
+                        "roe": round(roe_val, 1),
+                        "pe": round(pe, 1),
+                    }
+        except Exception as e:
+            logger.warning(f"Yahoo peer data fetch failed for {peer_sym}: {e}")
+
+    # Fallback to Screener.in
+    logger.info(f"Triggering Screener.in fallback for peer {peer_sym}")
     try:
-        ticker = yf.Ticker(peer_sym)
-        info = ticker.info or {}
-        name = info.get("longName") or info.get("shortName")
-        if not name:
-            return None
+        scr_data = fetch_screener_ratios(peer_sym)
+        if scr_data and scr_data.get("name") and scr_data.get("current_price"):
+            latest_sales = 0.0
+            latest_opm = 0.0
+            if scr_data.get("annual_results"):
+                latest_sales = scr_data["annual_results"][-1].get("sales", 0.0)
+                latest_opm = scr_data["annual_results"][-1].get("opm", 0.0)
 
-        price = info.get("currentPrice") or info.get("regularMarketPrice") or info.get("previousClose")
-        if price is None:
-            return None
-
-        mcap_raw = safe_float(info.get("marketCap"), 0)
-        revenue_raw = safe_float(info.get("totalRevenue"), 0)
-        opm_val = safe_float(info.get("operatingMargins"), 0) * 100
-        roe_val = safe_float(info.get("returnOnEquity"), 0) * 100
-        pe = safe_float(info.get("trailingPE") or info.get("forwardPE"), 0)
-
-        return {
-            "symbol": peer_sym,
-            "name": name,
-            "currentPrice": round(float(price), 2),
-            "marketCap": round(mcap_raw / 10000000, 2),   # Crores
-            "revenue": round(revenue_raw / 10000000, 2),   # Crores
-            "opm": round(opm_val, 1),
-            "roe": round(roe_val, 1),
-            "pe": round(pe, 1),
-        }
+            return {
+                "symbol": peer_sym,
+                "name": scr_data["name"],
+                "currentPrice": round(float(scr_data["current_price"]), 2),
+                "marketCap": round(float(scr_data.get("market_cap", 0.0)), 2), # Screener market cap is already in Crores
+                "revenue": round(float(latest_sales), 2),
+                "opm": round(float(latest_opm), 1),
+                "roe": round(float(scr_data.get("roe", 0.0)), 1),
+                "pe": round(float(scr_data.get("pe", 0.0)), 1) if scr_data.get("pe") is not None else 0.0
+            }
     except Exception as e:
-        logger.warning(f"Failed to fetch peer data for {peer_sym}: {e}")
-        return None
+        logger.warning(f"Screener fallback failed for peer {peer_sym}: {e}")
+    return None
 
 @app.get("/api/peers/{sector}")
 def get_peers(sector: str):
@@ -275,29 +300,46 @@ TRENDING_FEATURED_SYMBOLS = [
 
 FEATURED_CACHE: List[Dict[str, Any]] = []
 _cache_lock = threading.Lock()
+_is_loading = False
+_loading_lock = threading.Lock()
 
 def load_featured_stocks_data():
     """Background loader that pre-fetches trending stocks in parallel."""
-    global FEATURED_CACHE
-    logger.info("Pre-loading trending featured stocks cache in parallel...")
-    results = []
-    with ThreadPoolExecutor(max_workers=min(16, len(TRENDING_FEATURED_SYMBOLS))) as executor:
-        futures = {executor.submit(fetch_company_data, sym): sym for sym in TRENDING_FEATURED_SYMBOLS}
-        for future in as_completed(futures):
-            try:
-                res = future.result()
-                if res and res.get("symbol"):
-                    results.append(res)
-            except Exception as e:
-                logger.warning(f"Error fetching featured stock: {e}")
+    global FEATURED_CACHE, _is_loading
+    
+    with _loading_lock:
+        if _is_loading:
+            logger.info("Featured stocks cache loader already running. Skipping duplicate run.")
+            return
+        _is_loading = True
 
-    if results:
-        # Preserve original trending order
-        symbol_order = {sym.replace('.NS',''): i for i, sym in enumerate(TRENDING_FEATURED_SYMBOLS)}
-        results.sort(key=lambda x: symbol_order.get(x.get("symbol", "").replace('.NS',''), 99))
-        with _cache_lock:
-            FEATURED_CACHE = results
-        logger.info(f"Successfully cached {len(FEATURED_CACHE)} trending featured stocks.")
+    try:
+        logger.info("Pre-loading trending featured stocks cache in parallel...")
+        results = []
+        import time
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            futures = {}
+            for sym in TRENDING_FEATURED_SYMBOLS:
+                futures[executor.submit(fetch_company_data, sym)] = sym
+                time.sleep(1.5)
+            for future in as_completed(futures):
+                try:
+                    res = future.result()
+                    if res and res.get("symbol"):
+                        results.append(res)
+                except Exception as e:
+                    logger.warning(f"Error fetching featured stock: {e}")
+
+        if results:
+            # Preserve original trending order
+            symbol_order = {sym.replace('.NS',''): i for i, sym in enumerate(TRENDING_FEATURED_SYMBOLS)}
+            results.sort(key=lambda x: symbol_order.get(x.get("symbol", "").replace('.NS',''), 99))
+            with _cache_lock:
+                FEATURED_CACHE = results
+            logger.info(f"Successfully cached {len(FEATURED_CACHE)} trending featured stocks.")
+    finally:
+        with _loading_lock:
+            _is_loading = False
 
 # Start background cache preloader on module import
 threading.Thread(target=load_featured_stocks_data, daemon=True).start()
@@ -310,7 +352,7 @@ def get_featured_stocks():
         if FEATURED_CACHE:
             return {"featured": FEATURED_CACHE}
 
-    # Fallback if cache not ready yet
-    load_featured_stocks_data()
-    return {"featured": FEATURED_CACHE}
+    # Fallback if cache not ready yet: start in background, do not block the request
+    threading.Thread(target=load_featured_stocks_data, daemon=True).start()
+    return {"featured": []}
 

@@ -493,14 +493,14 @@ def calculate_valuation_and_shareholding(info: Dict[str, Any], price_info: Dict[
     else:
         trailing_eps = safe_float(info.get("trailingEps"), 0.0)
     
-    forward_eps = safe_float(info.get("forwardEps"))
+    forward_eps = safe_float(info.get("forwardEps"), 0.0)
     if forward_eps <= 0 or (forward_eps > trailing_eps * 2.5):
         forward_eps = trailing_eps * 1.12 if trailing_eps > 0 else 0.0
 
     # 3. Fair Price Components (Trailing, Forward, and Analyst Consensual Target)
     trailing_fair = trailing_eps * ind_pe if trailing_eps > 0 else 0.0
     forward_fair = forward_eps * (ind_pe * 0.95) if forward_eps > 0 else trailing_fair
-    analyst_target = safe_float(info.get("targetMeanPrice")) or safe_float(info.get("targetMedianPrice"))
+    analyst_target = safe_float(info.get("targetMeanPrice"), 0.0) or safe_float(info.get("targetMedianPrice"), 0.0)
 
     # Weighted Intrinsic Fair Price
     if analyst_target > 0 and trailing_fair > 0:
