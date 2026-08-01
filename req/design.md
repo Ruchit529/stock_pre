@@ -1,1946 +1,1279 @@
 # DESIGN.md
 
-# STOCK ANALYSIS PLATFORM
-## UI/UX DESIGN PROMPT
+# Stock Analysis Platform — UI/UX Design Specification
+
+## 1. Design Objective
+
+Design a **simple, clean, modern, aesthetic, responsive and user-friendly Stock Analysis Platform**.
+
+The interface should make complex stock-analysis information easy to understand without making the application look overcrowded or overly technical.
+
+The design should feel like a **professional financial analysis product**, while remaining approachable for normal users.
 
 ---
 
-# 1. IMPORTANT DESIGN RULE
+# 2. PRIMARY DESIGN REFERENCES
 
-Design the Stock Analysis Platform strictly from the information contained in:
+Two reference images are provided with the project.
 
-- `YOUTUBE MASTERCOURSE PDF.pdf`
+Use the images as the **primary visual reference** for:
 
-This document is a UI/UX design instruction for Antigravity.
-
-## STRICT SOURCE RULE
-
-Do not add product concepts, financial metrics, analysis categories, investment rules, terminology, calculations, screens, or features that are not supported by the supplied PDF.
-
-If something is not present in the PDF:
-
-- Do not invent it.
-- Do not assume it.
-- Do not add it just because it is common in stock-analysis applications.
-- Do not add additional financial metrics.
-- Do not add additional valuation methods.
-- Do not add additional investment strategies.
-- Do not add AI functionality.
-- Do not add news sentiment.
-- Do not add technical indicators that are not covered by the PDF.
-
-When a UI design decision is required but the PDF does not specify an exact visual implementation, choose the simplest professional UI treatment necessary to present the PDF content clearly. Do not introduce new product functionality.
-
----
-
-# 2. DESIGN OBJECTIVE
-
-Create a professional stock-analysis research interface that helps the user understand and follow the educational framework presented in the PDF.
-
-The visual hierarchy should follow the learning/research sequence present in the PDF:
-
-Business
-↓
-Industry
-↓
-Fundamental Analysis
-↓
-Stage 1 — Quick Screening / Gatekeeping
-↓
-Stage 2 — Deep Trend Analysis
-↓
-Business Model
-↓
-Competitive Advantage / MOAT
-↓
-Valuation
-↓
-Entry & Exit Strategies
-↓
-Portfolio Construction
-↓
-Risk / Psychology
-
-The UI must make this sequence easy to understand.
-
----
-
-# 3. DESIGN CHARACTER
-
-Create a:
-
-- Professional
-- Financial research focused
-- Clean
-- Structured
-- Data-readable
-- Educational
-- Analytical
-
-interface.
-
-The design must prioritize financial information and analysis over decoration.
-
-Do not make the application look like:
-
-- A gaming application
-- A social-media application
-- A trading execution terminal
-- A generic admin dashboard
-- An AI chatbot
-
----
-
-# 4. VISUAL REFERENCE
-
-Use the supplied Master Course PDF itself as the visual/content reference.
-
-The PDF uses a presentation/teaching style with:
-
-- Strong section titles
-- Clear module separation
-- Short explanatory blocks
+- Overall visual language
+- Layout quality
+- Card structure
+- Spacing
+- Typography hierarchy
+- Navigation
+- Financial data presentation
 - Tables
-- Comparisons
-- Examples
-- Numeric calculations
-- Checklists
-- Key takeaways
-- Structured learning sections
+- Score displays
+- Analysis sections
+- Responsive behavior
+- Desktop/mobile adaptation
+- General visual aesthetics
 
-Translate this educational structure into a modern web interface.
+The reference images are available in the project's image folder / provided reference images.
 
-Do not copy the PDF page layout literally.
+## IMPORTANT
 
-The web application should improve navigation and readability while preserving the same information hierarchy.
+The reference images are **NOT strict pixel-perfect templates**.
 
----
+Do NOT blindly copy the exact:
 
-# 5. COLOR DESIGN
+- Screen layout
+- Card dimensions
+- Number of cards
+- Spacing
+- Component positions
+- Navigation arrangement
+- Content density
+- Exact typography sizes
+- Exact visual proportions
 
-The PDF does not provide a formal web-app color system.
+Instead:
 
-Therefore:
+> Use the references as the **design language and visual direction** for the application.
 
-- Do not claim that specific colors are required by the PDF.
-- Do not create a large decorative color system.
-- Use a restrained professional financial visual treatment.
-- Use color primarily to distinguish information states already represented in the PDF.
+If a reference layout creates a UX problem, responsiveness issue, content overflow, excessive complexity, or inconsistency with the approved application flow, **adapt the design intelligently**.
 
-Examples of states that may need visual distinction:
+The final design should prioritize:
 
-- Excellent
-- Good
-- Acceptable
-- Weak
-- Red Flag
-- Undervalued
-- Fair Valued
-- Getting Expensive
-- Overvalued
-- Increasing
-- Decreasing
-- Stable
+1. Usability
+2. Responsiveness
+3. Readability
+4. Visual hierarchy
+5. Accessibility
+6. Consistency
+7. Aesthetic quality
 
-Do not introduce additional semantic categories.
-
----
-
-# 6. TYPOGRAPHY
-
-The PDF does not specify a web font family.
-
-Therefore, do not treat any particular font as a requirement from the PDF.
-
-Use a clean, highly readable web typography system.
-
-Typography hierarchy should make the following easy to distinguish:
-
-Module
-↓
-Section
-↓
-Topic
-↓
-Metric
-↓
-Value
-↓
-Explanation
-
-Financial numbers must be highly readable.
+over copying the reference images exactly.
 
 ---
 
-# 7. GLOBAL APPLICATION STRUCTURE
+# 3. DESIGN STYLE
 
-Create a consistent application shell.
+The overall visual style should be:
 
-The user should always be able to understand:
+- Modern
+- Minimal
+- Professional
+- Clean
+- Financial/analytical
+- Spacious
+- Information-focused
+- Easy to scan
+- Aesthetic without excessive decoration
 
-1. Which company is being analyzed.
-2. Which analysis section is currently open.
-3. Which stage of the framework they are viewing.
-4. Which metrics or questions are being evaluated.
+Avoid making the application feel:
 
-Use a clear navigation structure based on the modules and concepts present in the PDF.
+- Too corporate
+- Too dense
+- Too colorful
+- Too flashy
+- Too technical
+- Too dark
+- Too dashboard-heavy
+- Visually noisy
 
----
+The UI should communicate:
 
-# 8. COMPANY CONTEXT
-
-When the application is displaying company-specific analysis, maintain a clear company context.
-
-The company context should support information present in the PDF, including where applicable:
-
-- Company name
-- Business type
-- Industry
-- Financial analysis
-- Business model
-- Competitive advantage
-- Valuation
-
-Do not add company information fields that are not required by the source.
+> "Professional financial analysis made easy to understand."
 
 ---
 
-# 9. MAIN RESEARCH NAVIGATION
+# 4. TWO VISUAL MODES
 
-Use the following research structure:
+The design may support two visual themes inspired by the references:
 
-Business Analysis
+## Light Theme
+
+Primary characteristics:
+
+- White / near-white page background
+- White cards
+- Subtle borders
+- Very light shadows
+- Dark navy/black typography
+- Blue primary actions
+- Green positive financial indicators
+- Red negative indicators
+- Light neutral backgrounds for tables and secondary sections
+
+The light theme should be the **preferred/default visual direction** unless the application requirements specify otherwise.
+
+---
+
+## Dark Theme
+
+The dark reference can be used as inspiration for an optional dark mode.
+
+Characteristics:
+
+- Deep navy / charcoal background
+- Slightly lighter dark cards
+- Subtle borders
+- White/light typography
+- Blue primary actions
+- Green positive indicators
+- Red negative indicators
+- Muted secondary text
+
+Do not make the dark theme excessively black.
+
+Prefer:
+
+```text
+Deep Navy
 ↓
-Industry Analysis
+Dark Slate
 ↓
+Card Surface
+↓
+Subtle Border
+
+instead of pure black everywhere.
+
+5. COLOR SYSTEM
+
+Use a restrained financial-product color palette.
+
+Primary
+
+Use a professional blue for:
+
+Primary buttons
+Active navigation
+Links
+Selected tabs
+Important interactive elements
+Focus states
+
+The exact shade may be adjusted by the developer to maintain accessibility and visual consistency.
+
+Positive
+
+Use green for:
+
+Positive price movement
+Positive percentage movement
+Good score
+Strong financial metric
+Positive trend
+Healthy status
+Positive valuation signal
+
+Green should not dominate the entire UI.
+
+Use it primarily as a status indicator.
+
+Negative
+
+Use red for:
+
+Negative price movement
+Negative percentage movement
+Poor score
+Warning financial condition
+Negative trend
+Overvalued/negative valuation signal
+
+Avoid large red backgrounds unless necessary.
+
+Warning
+
+Use amber/orange for:
+
+Watch status
+Caution
+Moderate risk
+Attention-required conditions
+Neutral-to-negative indicators
+Neutral
+
+Use neutral gray/slate colors for:
+
+Secondary text
+Borders
+Disabled states
+Supporting information
+Table separators
+Background sections
+6. COLOR USAGE RULE
+
+Do not use colors only for decoration.
+
+Colors should communicate meaning.
+
+For example:
+
+Green  → Positive / Healthy / Good
+Red    → Negative / Risk / Poor
+Amber  → Warning / Watch
+Blue   → Primary action / Navigation / Information
+Gray   → Secondary / Neutral
+
+Maintain sufficient contrast between foreground and background.
+
+7. TYPOGRAPHY
+
+Typography should be:
+
+Clean
+Modern
+Highly readable
+Professional
+Consistent
+
+Prefer a modern sans-serif font family.
+
+A suitable font stack may be:
+
+Inter,
+system-ui,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+sans-serif
+
+Do not introduce unnecessary decorative fonts.
+
+8. TYPOGRAPHY HIERARCHY
+
+Maintain a clear hierarchy.
+
+Page Title
+
+Large and strong.
+
+Example:
+
+Stock Analysis
+Section Heading
+
+Medium/large and visually distinct.
+
+Example:
+
 Fundamental Analysis
-↓
-Stage 1 — Quick Screening
-↓
-Stage 2 — Deep Trend Analysis
-↓
-Business Model & Competitive Advantage
-↓
+Card Heading
+
+Medium and semibold.
+
+Example:
+
+Business Health
+Body Text
+
+Comfortable reading size.
+
+Supporting Text
+
+Smaller and muted.
+
+Financial Numbers
+
+Important financial numbers should have:
+
+Strong weight
+Clear alignment
+Adequate spacing
+Appropriate formatting
+
+Example:
+
+₹3,186.45
++24.35 (+0.77%)
+9. FINANCIAL NUMBER PRESENTATION
+
+Financial numbers are one of the most important parts of the UI.
+
+Always prioritize readability.
+
+Examples:
+
+₹3,186.45
+₹3,01,234 Cr.
+18.7%
+48.2
+8.5 / 10
+
+Use consistent formatting throughout the application.
+
+Do not randomly change:
+
+Decimal precision
+Currency formatting
+Percentage formatting
+Units
+Number abbreviations
+10. PAGE STRUCTURE
+
+Use a clear page hierarchy:
+
+Application Header
+        ↓
+Page Header
+        ↓
+Page Description / Context
+        ↓
+Primary Navigation / Tabs
+        ↓
+Main Content
+        ↓
+Secondary Information
+        ↓
+Footer
+
+Do not force every screen to use exactly this structure.
+
+If a particular analysis page benefits from a different structure, adapt it.
+
+11. MAIN NAVIGATION
+
+The application should have a clear primary navigation.
+
+The navigation should include the major modules defined by the approved application flow.
+
+At minimum, the main navigation should provide access to:
+
+Dashboard / Home
+Stock Analysis
+Sector Analysis
+Watchlist where required
+Other approved modules from APPFLOW.md
+
+Do not add modules that are not supported by the approved requirements.
+
+12. DESKTOP NAVIGATION
+
+For desktop screens, use either:
+
+A clean top navigation
+A compact sidebar
+Or another layout that provides better usability
+
+The reference images show both approaches.
+
+The implementation should choose the option that best fits the final application.
+
+The navigation must:
+
+Clearly indicate the active page.
+Be easy to scan.
+Avoid excessive menu items.
+Maintain consistent spacing.
+Avoid visual clutter.
+13. MOBILE NAVIGATION
+
+Do not shrink the desktop navigation until it becomes unusable.
+
+On smaller screens:
+
+Use a compact navigation solution.
+Use a menu/drawer when necessary.
+Keep important modules accessible.
+Avoid horizontal overflow.
+Keep touch targets comfortable.
+
+The mobile reference image should be treated as inspiration for responsive behavior, not as a strict implementation.
+
+14. STOCK ANALYSIS HEADER
+
+The stock analysis screen should clearly identify the selected company.
+
+The header may contain:
+
+Company Name
+Ticker / Symbol
+Current Price
+Price Change
+Percentage Change
+Sector
+Market Capitalization
+
+Additional actions may include:
+
+Add to Watchlist
+Download Report
+Other approved actions
+
+Do not overcrowd the header.
+
+If the available screen width is limited, reorganize the information intelligently.
+
+15. COMPANY DESCRIPTION
+
+Every relevant company analysis screen should provide a short company description where required by the source requirements.
+
+The description should help the user quickly understand:
+
+What the company does
+Main business/activity
+Major products/services where relevant
+Basic business context
+
+Keep the initial description concise.
+
+Do not create huge paragraphs inside the primary dashboard.
+
+If additional information is required, provide it in a separate section or expandable area.
+
+16. COMPANY OVERVIEW
+
+The company overview should provide a quick understanding of the stock.
+
+Possible information includes only the data supported by the approved requirements:
+
+Company name
+Symbol
+Current price
+Price change
+Market capitalization
+Sector
+Short description
+Relevant financial metrics
+
+Use cards or compact information blocks.
+
+Avoid presenting every available metric at once.
+
+17. CARD DESIGN
+
+Cards are an important part of the visual language.
+
+Cards should have:
+
+Subtle border
+Small/medium border radius
+Comfortable internal padding
+Clear heading
+Strong information hierarchy
+Minimal shadow
+Consistent spacing
+
+Do not overuse cards.
+
+A card should exist because it improves information grouping.
+
+18. CARD DENSITY
+
+Avoid excessive dashboard density.
+
+Bad:
+
+20 small cards
++
+multiple tables
++
+multiple charts
++
+large navigation
++
+multiple actions
+
+Preferred:
+
+Important information
+        ↓
+Clear grouping
+        ↓
+Progressive disclosure
+        ↓
+Detailed information when needed
+
+Users should immediately understand what is important.
+
+19. ANALYSIS TABS
+
+Analysis modules may use tabs/sub-navigation for related sections.
+
+Examples based on the approved application structure may include:
+
+Overview
+Business
+Sector
+Fundamentals
+Business Model
+MOAT
 Valuation
-↓
-Entry / Exit Strategies
-↓
-Portfolio Construction
-↓
-Risk / Psychology
+Entry / Exit
+Portfolio
+Psychology
+Risk
 
-The user should be able to move backward and forward through the research framework.
+Do not add tabs merely because they appear in the reference.
 
----
+Only implement tabs supported by APPFLOW.md and the approved requirements.
 
-# 10. BUSINESS ANALYSIS SCREEN
+If there are too many tabs for the available width:
 
-Create a screen that helps the user understand the business before analyzing the stock.
+Collapse them.
+Use horizontal scrolling carefully.
+Group related sections.
+Use a dropdown/menu where appropriate.
 
-The PDF establishes the idea:
+Never allow tabs to overflow or overlap.
 
-> Stock kharidna = Business ka hissa kharidna
+20. TABLE DESIGN
 
-The design should therefore visually prioritize understanding the business.
-
-Include only source-supported business concepts.
-
----
-
-# 11. BUSINESS TYPE
-
-Present the three business types from the PDF clearly:
-
-- Product Based
-- Service Based
-- Asset Based
-
-Use a simple visual comparison.
-
-The PDF examples include:
-
-- Maruti
-- Asian Paints
-- Nestle
-- TCS
-- Zomato
-- Uber
-- HDFC Bank
-- Real Estate
-- Reliance
-- Infosys
-- ICICI Bank
-- Dabur
-- Apollo Hospital
-
-Only use examples that are actually present in the PDF.
-
----
-
-# 12. HOW BUSINESSES MAKE MONEY
-
-Create a section explaining:
-
-Revenue
-↓
-Costs
-↓
-Profit
-
-The UI can visually represent:
-
-- Revenue side
-- Cost side
-- Profit
-
-Use the examples from the PDF where appropriate.
-
-Do not introduce new business-model terminology.
-
----
-
-# 13. BUSINESS GROWTH / CAPITAL
-
-The PDF explains business expansion through:
-
-- Savings
-- Bootstrapping
-- Bank Loan / Debt
-- Partner / Investor
-- Equity Shares
-
-Present this as an educational visual flow if included.
-
-Do not add funding mechanisms not mentioned in the PDF.
-
----
-
-# 14. INDUSTRY ANALYSIS SCREEN
-
-Create a dedicated Industry Analysis section.
-
-The PDF asks questions such as:
-
-- Which industry is this?
-- Is this industry growing or dying?
-- Cyclical or stable?
-- Competitive or Monopoly?
-
-Design these as prominent research questions.
-
----
-
-# 15. INDUSTRY TYPES
-
-The PDF identifies three industry categories:
-
-- Cyclical
-- Defensive
-- Growth
-
-Create a clear comparison layout.
-
-Each category should show only information provided by the PDF.
-
----
-
-# 16. CYCLICAL INDUSTRY
-
-Show the PDF-supported characteristics:
-
-- Economy good → Industry good
-- Economy bad → Industry bad
-- High growth during good times
-- Sharp fall during bad times
-- High risk
-- High return potential
-
-Examples from PDF:
-
-- Automobiles
-- Real Estate
-- Construction
-- Metals
-- Mining
-- Capital Goods
-- Heavy Machinery
-- Hotels
-- Travel
-
-Do not add other industries.
-
----
-
-# 17. DEFENSIVE INDUSTRY
-
-Show:
-
-- Stable growth
-- Predictability
-- Essential needs
-- Recession resistance
-- Low risk
-- Moderate return
-
-Examples from PDF:
-
-- FMCG
-- Pharma
-- Utilities
-- Telecom
-- Power
-
-Do not add other examples.
-
----
-
-# 18. GROWTH INDUSTRY
-
-Show:
-
-- Rapidly expanding sectors
-- Future trends
-- Adoption driven
-- Consistent high growth
-- Long runway
-- Potentially high valuations
-- Competition intensity
-
-Examples from PDF:
-
-- IT
-- Renewable Energy
-- EV
-- E-Commerce
-- Fintech
-
-Do not add other examples.
-
----
-
-# 19. INDUSTRY ALLOCATION
-
-The PDF provides different allocation examples depending on market condition.
-
-Represent them clearly.
-
-## Bull Market
-
-- 40% Cyclical
-- 30% Growth
-- 30% Defensive
-
-## Bear Market
-
-- 60% Defensive
-- 30% Growth
-- 10% Cyclical
-
-## Normal Market
-
-- 30% Cyclical
-- 30% Growth
-- 40% Defensive
-
-Do not change these values.
-
----
-
-# 20. FUNDAMENTAL ANALYSIS SCREEN
-
-The PDF describes fundamental analysis through three pillars:
-
-- Financial
-- Qualitative
-- Industry
-
-Create a visual representation of the three pillars.
-
-The user should understand that fundamental analysis is not only financial ratios.
-
----
-
-# 21. FINANCIAL ANALYSIS PILLAR
-
-The PDF identifies three financial statements:
-
-- Balance Sheet
-- P&L Statement
-- Cash Flow Statement
-
-Show these as the main financial-analysis categories.
-
----
-
-# 22. BALANCE SHEET
-
-The PDF describes:
-
-- Assets
-- Liabilities
-- Net Worth
-
-Design these as structured financial information.
-
-Do not introduce unrelated balance-sheet metrics.
-
----
-
-# 23. P&L STATEMENT
-
-Show:
-
-- Revenue
-- Expenses
-- Profit
-
-Use a simple financial-flow presentation.
-
----
-
-# 24. CASH FLOW STATEMENT
-
-Show:
-
-- Cash Aaya Kahan Se
-- Cash Gaya Kahan Pe
-- Net Cash Kitna
-
-The UI should make cash inflow, cash outflow and net cash easy to understand.
-
----
-
-# 25. QUALITATIVE ANALYSIS
-
-The PDF identifies qualitative areas including:
-
-- Management Integrity
-- Brand Strength
-- Competitive Advantage / MOAT
-- Industry Position
-- Corporate Governance
-
-Present these separately from numeric financial analysis.
-
-Do not convert qualitative concepts into a score unless the PDF explicitly provides a score.
-
----
-
-# 26. STAGE 1 — QUICK SCREENING
-
-This is a major screen.
-
-The PDF describes Stage 1 as:
-
-> GATEKEEPING
-
-The design should visually communicate that this is the first screening stage.
-
----
-
-# 27. STAGE 1 SCORECARD
-
-Create a structured scorecard for:
-
-- Sales Growth
-- Profit Growth
-- OPM
-- ROE
-- ROCE
-- Debt / Equity
-- Current Ratio
-- Interest Coverage
-- P/E
-- ROA
-
-For Banks/NBFCs:
-
-- Remove Debt / Equity
-- Score out of 9 instead of 10
-
-Do not add any other metric.
-
----
-
-# 28. STAGE 1 METRIC PRESENTATION
-
-Each metric should show:
-
-- Metric
-- Value
-- Relevant benchmark / interpretation
-- Score
-- Status
-
-Where the PDF gives benchmark ranges, show them beside the metric.
-
-Do not invent benchmark values.
-
----
-
-# 29. SALES GROWTH
-
-Use the PDF's concepts:
-
-- 1-year Sales Growth
-- 5-year Sales Growth
-
-The UI should show the PDF scoring logic.
-
-Do not introduce additional growth periods.
-
----
-
-# 30. PROFIT GROWTH
-
-Show:
-
-- 1-year Profit Growth
-- 5-year Profit Growth
-
-Display the PDF's scoring interpretation.
-
----
-
-# 31. OPM
-
-The UI must clearly show:
-
-> Operating Profit Margin
-
-The PDF explains OPM as operating profit from sales.
-
-Show industry-specific benchmark information where supplied in the PDF.
-
-The PDF includes examples such as:
-
-- IT Services
-- Pharma
-- FMCG
-- Paints / Wires
-- Automobiles
-- Retail
-- Steel / Metals
-
-Only show the values provided by the source.
-
----
-
-# 32. ROE
-
-Show:
-
-> Return on Equity
-
-The PDF's benchmark categories include:
-
-- 25%+ Exceptional
-- 20–25% Excellent
-- 15–20% Good
-- 10–15% Acceptable
-- <10% Weak / Red Flag
-
-Use these exact categories.
-
-Also show the PDF's long-term ROE consistency concept where applicable.
-
----
-
-# 33. ROCE
-
-Show the ROCE metric and its source-defined scoring logic.
-
-Do not introduce new ROCE benchmarks not present in the PDF.
-
----
-
-# 34. DEBT / EQUITY
-
-Show Debt / Equity as a Stage 1 metric.
-
-For Banks/NBFCs:
-
-> Do not display D/E in Stage 1 scorecard.
-
-Follow the PDF's stated exception exactly.
-
----
-
-# 35. CURRENT RATIO
-
-Show the Current Ratio metric and its source-defined interpretation.
-
-Do not add unsupported benchmark categories.
-
----
-
-# 36. INTEREST COVERAGE
-
-Show:
-
-> Interest Coverage
-
-Use the PDF's scoring logic and benchmark information.
-
-Do not create new interpretation bands.
-
----
-
-# 37. P/E RATIO
-
-Show P/E as part of Stage 1.
-
-The PDF explains that P/E should be evaluated relative to industry P/E.
-
-The design should allow:
-
-- Company P/E
-- Industry P/E
-- Comparison
-- Score
-
----
-
-# 38. ROA
-
-Show:
-
-> Return on Assets
-
-Use the PDF's industry-specific benchmark information where available.
-
----
-
-# 39. STAGE 1 FINAL SCORE
-
-Create a prominent scorecard.
-
-Show:
-
-- Final Score
-- Score Result
-
-Use exactly the PDF's verdict bands:
-
-- 8.5 and above → Exceptional
-- 7.5 – 8.5 → Excellent
-- 6.5 – 7.5 → Good
-- Less than 6.5 → Avoid
-
-Do not create additional verdict levels.
-
----
-
-# 40. STAGE 1 GATE
-
-The PDF says:
-
-> Proceed to Stage 2 only if Score ≥ 6.5
-
-The UI should clearly show this condition.
-
-Example structure:
-
-Stage 1 Score
-↓
-Verdict
-↓
-Stage 2 Eligibility
-
-Do not invent another threshold.
-
----
-
-# 41. STAGE 2 — DEEP TREND ANALYSIS
-
-Create a dedicated Stage 2 screen.
-
-The PDF describes Stage 2 as:
-
-> DEEP TREND ANALYSIS
-
-The analysis generally covers:
-
-- Past 2 years quarterly
-- Past 5 years annually
-
----
-
-# 42. STAGE 2 SCORE STRUCTURE
-
-Show the six categories and their points:
-
-- Quarterly Results — 2 points
-- P&L Statement — 3 points
-- Balance Sheet — 1 point
-- Cash Flow — 1 point
-- Ratios — 2 points
-- Shareholding — 1 point
-
-Total:
-
-> 10 points
-
-Do not change the weightage.
-
----
-
-# 43. QUARTERLY RESULTS TREND
-
-Use the PDF's two analysis areas:
-
-- Sales YoY
-- OPM YoY
-
-The UI should make trend direction easy to see.
-
-Possible source-defined states include:
-
-- Increasing
-- Increasing with fluctuation
-- Flat
-- Declining
-- Constant
-- Mostly increasing
-- Mostly decreasing
-
-Do not invent additional trend categories.
-
----
-
-# 44. P&L TREND
-
-Show the PDF's three areas:
-
-- Sales
-- OPM
-- Net Profit
-
-Use historical trend visualization plus the source-defined score classification.
-
----
-
-# 45. BALANCE SHEET TREND
-
-Show:
-
-- Reserves
-- Borrowings
-
-The PDF emphasizes the relationship between reserves and borrowings.
-
-Create a comparison visualization that makes the trend easy to understand.
-
----
-
-# 46. CASH FLOW TREND
-
-Show:
-
-- CFO
-- Net Profit
-- Debtor Days
-
-The PDF's key relationship is:
-
-> Cash Flow from Operations vs Net Profit
-
-Use a trend presentation.
-
----
-
-# 47. DEBTOR DAYS
-
-The PDF specifies:
-
-> Debtor Days should never exceed 120
-
-Show this clearly.
-
-The source-defined trend categories should be represented without modification.
-
----
-
-# 48. RATIOS TREND
-
-The PDF focuses on:
-
-- ROE
-- ROCE
-
-The design should show historical trends rather than presenting them as isolated current values.
-
----
-
-# 49. SHAREHOLDING PATTERN
-
-Show the categories from the PDF:
-
-- Promoter
-- Public
-- FII
-- DII
-
-Display their trend over time.
-
-The PDF identifies the following concerns:
-
-- Promoter holding decreasing
-- FII holding decreasing
-- DII holding decreasing
-- Public holding above 50%
-
-Do not add other shareholding rules.
-
----
-
-# 50. STAGE 2 SCORE
-
-Show:
-
-- Quarterly Results
-- P&L
-- Balance Sheet
-- Cash Flow
-- Ratios
-- Shareholding
-- Total Stage 2 Score
-
-Keep the numeric scoring visually separate from qualitative Business Model / MOAT analysis.
-
----
-
-# 51. BUSINESS MODEL SCREEN
-
-The PDF asks three major questions.
-
-Design the screen around these questions:
-
-1. How does company create value?
-2. How does company capture value?
-3. Is it scalable?
-
----
-
-# 52. CREATE VALUE
-
-Show:
-
-- Product / Service
-- Customer
-- Problem Solved
-
-Use a simple structured layout.
-
----
-
-# 53. CAPTURE VALUE
-
-Show:
-
-- How do they charge?
-- Pricing Model
-- Revenue Streams
-
-Do not add unrelated business-model metrics.
-
----
-
-# 54. SCALABILITY
-
-Show:
-
-> Can grow without proportional cost increase?
-
-Also show:
-
-- Asset Light
-- Asset Heavy
-
-The PDF explains:
-
-## Asset Light
-
-- Minimal fixed assets
-- Can scale without proportional Capex
-- High ROE
-- High ROA
-- Better cash flow
-
-## Asset Heavy
-
-- Fixed assets required
-- More Capex required for growth
-- Lower ROE
-- Lower ROA
-- Capital intensive
-
----
-
-# 55. BUSINESS MODEL TYPES
-
-Create a visual selection/reference section containing exactly the business models covered by the PDF:
-
-- Subscription Model
-- Marketplace Model
-- Manufacturing Model
-- Asset Light vs Asset Heavy
-- Freemium Model
-
----
-
-# 56. SUBSCRIPTION MODEL
-
-Show the PDF-supported concepts:
-
-- Recurring revenue
-- Predictable cash flows
-- High customer lifetime value
-- Customer acquisition challenge
-- Churn
-- Continuous value delivery
-
-Metrics mentioned by the PDF:
-
-- MRR
-- CAC
-- Churn Rate
-- CAC Payback Period
-
-Do not add other subscription metrics.
-
----
-
-# 57. MARKETPLACE MODEL
-
-Show:
-
-- Buyers and sellers
-- Commission on transactions
-- Asset light
-- Network effects
-- Scalability
-
-PDF metrics:
-
-- GMV
-- Take Rate
-- Active Users
-- Order Frequency
-
-Do not add other metrics.
-
----
-
-# 58. MANUFACTURING MODEL
-
-Show:
-
-- Branded Manufacturing
-- Commodity Manufacturing
-
-The PDF discusses:
-
-- Production assets
-- Quality control
-- Brand building
-- Scale advantage
-- Capital intensity
-- Inventory management
-- Price competition
-
-Do not introduce unrelated manufacturing concepts.
-
----
-
-# 59. FREEMIUM MODEL
-
-Show:
-
-Basic Version → Free
-Premium Version → Paid
-
-The PDF's concepts include:
-
-- Large free user base
-- Conversion to paid
-- Viral growth
-- Network effects
-- Conversion rate
-- Scaling
-
-Do not add unsupported SaaS metrics.
-
----
-
-# 60. ECONOMIC MOAT SCREEN
-
-Create a dedicated MOAT section.
-
-The PDF describes MOAT as a major competitive advantage concept.
-
-Show exactly five types:
-
-- Brand Moat
-- Network Effect Moat
-- Cost Advantage Moat
-- Switching Cost Moat
-- Regulatory / Patent Moat
-
----
-
-# 61. BRAND MOAT
-
-PDF examples:
-
-- Asian Paints
-- Nestle
-- Apple
-- Titan
-
----
-
-# 62. NETWORK EFFECT MOAT
-
-PDF examples:
-
-- Zerodha
-- WhatsApp
-- VISA
-- Mastercard
-- LinkedIn
-
----
-
-# 63. COST ADVANTAGE MOAT
-
-Show the source-defined sources of cost advantage:
-
-- Scale
-- Location
-- Technology
-- Supply Chain
-
-PDF examples:
-
-- Reliance
-- DMart
-- Maruti Suzuki
-
----
-
-# 64. SWITCHING COST MOAT
-
-Explain the PDF's concept:
-
-- Difficult to leave
-- Expensive
-- Time consuming
-- Risky
-- Painful
-
-PDF examples:
-
-- Banking
-- Enterprise Software
-- Accounting Software
-- Insurance
-
----
-
-# 65. REGULATORY / PATENT MOAT
-
-Show:
-
-> Legal Protection
-
-PDF examples:
-
-- Pharma patents
-- Spectrum licenses
-- Airport
-- Defense contracts
-- Alcohol licenses
-
-Only use examples supplied by the PDF.
-
----
-
-# 66. MOAT IDENTIFICATION
-
-Create a five-question checklist.
-
-Exactly use these questions:
-
-1. Can competitors easily copy the business?
-2. Will this advantage last 10+ years?
-3. Has ROE been consistently high for 10+ years?
-4. Can the company raise prices without losing customers?
-5. Is market share stable or growing in 5 years?
-
-Do not convert these into additional scoring unless the source explicitly does so.
-
----
-
-# 67. VALUATION SCREEN
-
-Create a separate valuation section.
-
-The PDF explains:
-
-Good Company + Expensive Price
-→ Loss or Long Wait
-
-Good Company + Fair Price
-→ Good Returns
-
-Good Company + Cheap Price
-→ Excellent Returns
-
-This relationship should be visually prominent.
-
----
-
-# 68. VALUATION METHODS
-
-The PDF covers:
-
-- P/E Ratio
-- PEG Ratio
-- P/B Ratio
-- DCF
-- Margin of Safety
-
-Do not add:
-
-- EV/EBITDA
-- Dividend Discount Model
-- Price/Sales
-- Technical indicators
-- Any other valuation method
-
----
-
-# 69. P/E VALUATION
-
-Design around:
-
-- Company P/E
-- Industry P/E
-
-The PDF's process:
-
-Find Company P/E
-↓
-Find Industry P/E
-↓
-Compare
-
-Fair price:
-
-> Industry P/E × Company EPS
-
-The PDF states that when company P/E is more than 2x industry P/E, the stock is generally avoided as highly overvalued.
-
-Show this exactly as source guidance.
-
----
-
-# 70. PEG VALUATION
-
-Show:
-
-> PEG = P/E Ratio ÷ Earnings Growth Rate
-
-Use the source-defined interpretation:
-
-- < 1 → Undervalued
-- 1 – 1.5 → Fair Valued
-- 1.5 – 2 → Getting Expensive
-- > 2 → Overvalued
-
-The PDF identifies PEG as useful for:
-
-- IT
-- Pharma
-- Consumer discretionary
-
-And says it is not suitable for:
-
-- Banks
-- Mature companies
-- Low-growth cyclical companies
-
----
-
-# 71. P/B VALUATION
-
-Show:
-
-> P/B = Market Price Per Share ÷ Book Value Per Share
-
-The PDF says this is useful for asset-heavy businesses such as:
-
-- Banks
-- Real Estate
-- Manufacturing
-- Insurance
-
-Show the source-defined ranges.
-
-## Banks
-
-- 1 – 1.5 → Very Cheap
-- 1.5 – 2 → Fair
-- 2 – 3 → Reasonable
-- > 3 → Expensive
-
-## Manufacturing
-
-- < 1.5 → Cheap
-- 1.5 – 3 → Fair
-- > 3 → Expensive
-
-Do not extend these categories to unsupported industries.
-
----
-
-# 72. DCF
-
-The PDF describes DCF as an advanced / brief introduction.
-
-Represent the concept:
-
-> Company Value = Present Value of Future Cash Flows
-
-Do not create an advanced DCF model beyond the source content.
-
----
-
-# 73. MARGIN OF SAFETY
-
-Show:
-
-- Fair Value
-- Current Value
-- Margin of Safety
-
-Formula from the source:
-
-> Margin of Safety = (Fair Value − Current Price) ÷ Fair Value
-
-The PDF's rule:
-
-> Only invest when price is at least 20% below fair value.
-
-Display this as source educational content.
-
----
-
-# 74. ENTRY STRATEGY SCREEN
-
-The PDF identifies three entry strategies:
-
-- Lump Sum
-- SIP
-- Tranched Buying
-
-Create three clearly separated sections.
-
----
-
-# 75. LUMP SUM
-
-Show source-defined:
-
-## Advantages
-
-- Full capital immediately working
-- Simple one decision
-- Best in clear undervaluation
-- No timing complexity
-
-## Disadvantages
-
-- Timing risk very high
-- Psychological pressure
-- No averaging opportunity
-- Requires high conviction
-
-## When to Use
-
-- Market crash
-- Individual stock deeply undervalued
-- Large windfall
-- Experienced investor
-
-Do not add other conditions.
-
----
-
-# 76. SIP
-
-Show:
-
-## Advantages
-
-- No timing needed
-- Removes emotion
-- Averages volatility
-- Disciplined investing
-- Beginner friendly
-
-## Disadvantages
-
-- Slower wealth creation
-- Opportunity cost in crashes
-- Can be expensive in long bull runs
-
-## When to Use
-
-- Regular salaried income
-- Market at all-time high
-- Beginner
-- High volatility expected
-- Long-term goal
-
-Use only source-supported content.
-
----
-
-# 77. TRANCHED BUYING
-
-Show:
-
-> Tranched Buying = Hybrid Approach
-
-Use the source explanation only.
-
-Do not create additional tranche formulas or strategies.
-
----
-
-# 78. EXIT STRATEGY SCREEN
-
-The PDF identifies seven exit scenarios:
-
-1. Fundamentals Deteriorating
-2. Overvalued
-3. Better Opportunities Available
-4. Portfolio Rebalancing
-5. Goal Achieved
-6. Mistake Realized
-7. Emergency
-
-Create a structured checklist or card layout.
-
-Do not add new exit conditions.
-
----
-
-# 79. PORTFOLIO CONSTRUCTION SCREEN
-
-The PDF describes portfolio construction around:
-
-- How many stocks
-- Sector Diversification
-- Position Sizing
-- Core-Satellite Strategy
-- Portfolio Rebalancing
-- Common Mistakes
-
-These should become the primary sections.
-
----
-
-# 80. POSITION SIZING
-
-The PDF provides the concept:
-
-> Position Size = Capital × Allocation %
-
-Present this clearly if implemented.
-
-Do not add a different position-sizing formula.
-
----
-
-# 81. SECTOR DIVERSIFICATION
-
-The PDF discusses sector allocation and provides:
-
-> No single sector > 20%
-
-Use this source-defined concept.
-
-Do not invent other diversification rules.
-
----
-
-# 82. CORE-SATELLITE STRATEGY
-
-Create a dedicated educational section for:
-
-> Core + Satellite
-
-Use only the explanation and concepts contained in the PDF.
-
----
-
-# 83. PORTFOLIO REBALANCING
-
-Create a simple reference section explaining portfolio rebalancing according to the PDF.
-
-Do not add automatic brokerage or portfolio-trading functionality.
-
----
-
-# 84. PSYCHOLOGY / RISK SCREEN
-
-Create a dedicated section for the psychological concepts in the PDF.
-
-The PDF discusses:
-
-- Fear
-- Greed
-- FOMO
-- Panic Selling
-- Holding Losers
-- Selling Winners Too Early
-- Herd Mentality
-- Over Trading
-- Following Tips
-- Wrong Stock Selection
-- Not Diversifying
-- Not Diversifying
-
-Present them as educational concepts.
-
----
-
-# 85. RISK MANAGEMENT
-
-Where supported by the PDF, present:
-
-- Emergency fund
-- Debt / Equity allocation
-- Position sizing
-- Stop loss
-- Emotional decision-making
-
-Do not add risk-management concepts that are not present in the PDF.
-
----
-
-# 86. COMMON MISTAKES
-
-Create a clearly visible educational section for source-defined mistakes.
-
-The PDF includes concepts such as:
-
-- Ignoring Debt Levels
-- Comparing Different Industries
-- Falling for Cheap Stocks
-- Quarterly Result Obsession
-- Analysis Paralysis
-- Half-Baked Learning
-- Herd Mentality
-- FOMO
-
-Use only source-supported mistakes.
-
----
-
-# 87. STOCK MARKET MATHEMATICS
-
-Where the application includes this educational section, use the concepts from the PDF:
-
-- Capital
-- Time
-- Rate
-- Psychology
-- Tax
-- Mistake Cost
-
-The PDF also discusses:
-
-- Time in the market
-- Starting early
-- Staying long
-- Compounding
-- Inflation
-- Nominal vs Real Returns
-
-Do not add unrelated calculators.
-
----
-
-# 88. COMPARISON DESIGN
-
-Where company comparison is required by the project, use only metrics and concepts that are present in the PDF.
-
-Possible comparison areas include:
-
-- Business Type
-- Industry
-- Sales Growth
-- Profit Growth
-- OPM
-- ROE
-- ROCE
-- Debt / Equity
-- Current Ratio
-- Interest Coverage
-- P/E
-- ROA
-- Stage 1 Score
-- Stage 2 Score
-- Valuation
-- Business Model
-- MOAT
-
-Do not add unsupported comparison fields.
-
----
-
-# 89. TABLE DESIGN
-
-Financial tables should prioritize readability.
+Tables should be clean and easy to scan.
 
 Use:
 
-- Clear row labels
-- Clear periods
-- Numeric alignment
-- Visible units
-- Consistent decimal formatting
-- Clear trend direction
-- Score visibility
+Clear column headers
+Adequate row height
+Consistent alignment
+Subtle separators
+Highlighting only where meaningful
+Responsive handling
 
-Do not overload tables with unnecessary information.
+Financial numbers should generally be aligned consistently.
 
----
+Avoid excessively dense tables.
 
-# 90. TREND DESIGN
+21. RESPONSIVE TABLES
 
-For trend-based analysis, visually distinguish:
+Tables must not cause page-wide horizontal overflow.
 
-- Increasing
-- Increasing with fluctuation
-- Constant
-- Flat
-- Decreasing
-- Declining
-- Red Flag
+On smaller screens, choose the most appropriate solution:
 
-Only use a trend category when it exists in the source methodology.
+Horizontal table scrolling
+Reduced columns
+Priority columns
+Stacked information
+Responsive cards
+Alternative mobile presentation
 
----
+Do not force a desktop table onto a mobile screen if it becomes difficult to use.
 
-# 91. SCORE DESIGN
+22. SCORE COMPONENTS
 
-Scores should be visually prominent but not exaggerated.
+Stock scores should be visually prominent but not overwhelming.
 
-For Stage 1:
+Possible presentation:
 
-> Score / 10
+8.5 / 10
+Excellent
 
-For Banks/NBFCs:
+or:
 
-> Score / 9
+Business Health
+8.5 / 10
 
-For Stage 2:
+Use:
 
-> Score / 10
+Circular score indicators
+Progress bars
+Score badges
+Compact score cards
 
-Show the category-level breakdown underneath.
+depending on context.
 
----
+Use consistent score semantics throughout the platform.
 
-# 92. RED FLAG DESIGN
+23. SCORE COLOR LOGIC
 
-The PDF repeatedly uses the concept of a red flag.
+Use status colors carefully.
 
-Use a consistent visual treatment for source-defined red flags.
+Example:
 
-Do not create new red-flag rules.
+Excellent → Green
+Good      → Green / Blue
+Watch     → Amber
+Avoid     → Red
 
-A red flag should always be accompanied by the underlying metric or reason.
+The exact thresholds must come from the approved requirements.
 
----
+Do not invent scoring rules inside the UI.
 
-# 93. EDUCATIONAL EXPLANATIONS
+24. FINANCIAL METRIC GROUPS
 
-The PDF frequently explains metrics using simple analogies.
+Related metrics should be grouped together.
 
-Where these explanations are displayed, keep them short and readable.
+Example:
 
-Examples from the PDF include analogies for:
+ROE
+ROCE
+OPM
+P/E
+PEG
+P/B
+Debt/Equity
 
-- OPM
-- ROE
-- ROA
-- P/E
-- P/B
-- DCF
-- Margin of Safety
+Use compact metric blocks when appropriate.
 
-Do not replace source concepts with unrelated explanations.
+Avoid making every metric look like a separate large dashboard card.
 
----
+25. BUSINESS ANALYSIS SCREEN
 
-# 94. EXAMPLES
+The Business Analysis screen should prioritize understanding the company.
 
-Examples may be displayed where useful.
+Recommended structure:
 
-Only use companies/examples explicitly mentioned in the PDF.
+Company Header
+        ↓
+Short Company Description
+        ↓
+What the Business Does
+        ↓
+Products / Services
+        ↓
+Customers
+        ↓
+Problem Solved
+        ↓
+How the Business Makes Money
+        ↓
+Business Type
 
-Examples include:
+Only include sections supported by the project requirements.
 
-- HUL
-- ICICI Bank
-- Zensar Tech
-- Infosys
-- Maruti Suzuki
-- Asian Paints
-- Nestle
-- Apple
-- Titan
-- Zerodha
-- WhatsApp
-- VISA
-- Mastercard
-- LinkedIn
-- Reliance
-- DMart
-- Kalyan Jewellers
-- HDFC Bank
+Use simple visual grouping.
 
-Do not introduce unrelated examples.
+26. SECTOR ANALYSIS SCREEN
 
----
+Sector Analysis is a main application module and should be accessible through the main navigation.
 
-# 95. RESPONSIVE DESIGN
+The screen should make it easy to understand:
 
-The interface must remain usable on:
+Sector
+Sector classification
+Relevant market context
+Peer comparison
+Relevant sector metrics
+Other approved sector information
 
-- Desktop
-- Tablet
-- Mobile
+Possible layout:
 
-For financial tables:
+Sector Header
+        ↓
+Sector Classification
+        ↓
+Sector Overview
+        ↓
+Market Context
+        ↓
+Peer Comparison
+        ↓
+Relevant Metrics
 
-- Allow horizontal scrolling on small screens.
-- Never hide important metrics.
-- Keep metric names visible.
-- Preserve numerical readability.
+Do not overcrowd the page.
 
-For scorecards:
+27. FUNDAMENTAL ANALYSIS SCREEN
 
-- Stack sections vertically on mobile.
-- Keep the final score visible.
-- Keep the source-defined verdict visible.
+Fundamental analysis should emphasize:
 
----
+Financial metrics
+Scores
+Trends
+Comparison
+Explanations
 
-# 96. DATA VISUALIZATION
+Use tables for detailed data.
 
-Use visualizations only where they improve understanding of source-defined information.
+Use cards for summaries.
 
-Suitable visual forms:
+Use visual indicators for scores.
 
-- Trend lines
-- Comparison bars
-- Score cards
-- Tables
-- Progress indicators
-- Checklists
-- Relationship diagrams
+The screen should allow users to understand the result without reading every table row.
 
-Do not introduce financial charts or indicators that are not present in the PDF.
+28. DEEP FUNDAMENTAL ANALYSIS
 
----
+For detailed fundamental information:
 
-# 97. TECHNICAL ANALYSIS SCOPE
+Use a hierarchy such as:
 
-The PDF mentions Technical Analysis and Chart Patterns/Candlestick Analysis.
+Summary
+↓
+Key Metrics
+↓
+Quarterly Trends
+↓
+Annual Trends
+↓
+P&L
+↓
+Balance Sheet
+↓
+Cash Flow
+↓
+Ratios
+↓
+Shareholding
 
-However, the PDF indicates that detailed chart-pattern/candlestick analysis is covered separately.
+The exact sections must follow the approved project requirements.
 
-Therefore:
+Do not put all information into a single massive screen.
 
-- Do not invent a technical-analysis dashboard.
-- Do not add RSI.
-- Do not add MACD.
-- Do not add Bollinger Bands.
-- Do not add moving averages.
-- Do not add other technical indicators.
+Use sections, tabs, collapsible groups, or progressive disclosure where useful.
 
-Only include technical-analysis content explicitly supported by the source scope.
+29. VALUATION SCREEN
 
----
+Valuation information should be presented clearly.
 
-# 98. AI RESTRICTION
+Examples of presentation:
 
-Do not create:
+P/E
+Company P/E
+Industry P/E
+Fair P/E
+PEG
+P/E
+Earnings Growth
+PEG
+Margin of Safety
+Fair Value
+Current Price
+MOS
 
-- AI assistant
-- AI chatbot
-- AI-generated stock analysis
-- AI-generated explanation
-- AI stock recommendation
-- AI sentiment analysis
-- AI score
+Important valuation conclusions should be visually distinguishable.
 
-These are not part of the source material.
+Do not rely only on color to communicate the result.
 
----
+30. CHARTS
 
-# 99. TRADING / BROKERAGE RESTRICTION
+Charts should be:
 
-Do not create:
+Simple
+Clean
+Easy to interpret
+Properly labeled
+Responsive
 
-- Buy order
-- Sell order
-- Broker integration
-- Order placement
-- Trading terminal
-- Portfolio holdings ledger
-- Brokerage execution
+Avoid unnecessary decorative charts.
 
-The application is an analysis/research interface based on the source framework.
+Only visualize information where a chart improves understanding.
 
----
+If a table communicates the information better, use a table.
 
-# 100. DESIGN CONSISTENCY
+31. DASHBOARD
 
-All screens must use a consistent visual system.
+The dashboard should provide a quick overview rather than displaying every analysis detail.
+
+Potential areas:
+
+Market Overview
+        ↓
+Watchlist
+        ↓
+Recent Analysis
+        ↓
+Top Scores
+        ↓
+Analysis Summary
+
+The exact dashboard content must follow the approved requirements.
+
+Prioritize the most useful information.
+
+32. EMPTY STATES
+
+Every major data-driven component should have a meaningful empty state.
+
+Example:
+
+No stock selected
+
+Search for a company to begin analysis.
+
+Do not leave blank white cards.
+
+33. LOADING STATES
+
+Loading states must feel intentional.
+
+Use:
+
+Skeleton loaders
+Subtle progress indicators
+Loading text where appropriate
+
+Avoid freezing the entire interface unnecessarily.
+
+34. ERROR STATES
+
+Errors must be user-friendly.
+
+Do not expose technical errors such as:
+
+TypeError
+undefined is not an object
+500 Internal Server Error
+
+to normal users.
+
+Instead provide:
+
+Unable to load this information.
+
+Please try again.
+
+Technical details may be logged separately.
+
+35. RESPONSIVENESS — CRITICAL REQUIREMENT
+
+The application must be responsive.
+
+Do not design desktop first and simply shrink everything.
+
+Design intentionally for:
+
+Large Desktop
+↓
+Desktop
+↓
+Laptop
+↓
+Tablet
+↓
+Mobile
+↓
+Small Mobile
+36. RESPONSIVE RULES
+
+The interface must never have:
+
+Horizontal page overflow
+Overlapping cards
+Text cutoffs
+Broken tables
+Broken navigation
+Buttons outside the viewport
+Cards squeezed to unreadable sizes
+Charts extending outside containers
+Navigation overlapping content
+Excessive empty space
+Tiny unreadable text
+37. RESPONSIVE LAYOUT BEHAVIOR
+
+Desktop:
+
+Multi-column layouts
+        ↓
+Cards beside each other
+        ↓
+Detailed analysis visible
+
+Tablet:
+
+Reduced columns
+        ↓
+Cards reorganized
+        ↓
+Tables adapted
+
+Mobile:
+
+Single-column priority layout
+        ↓
+Important information first
+        ↓
+Secondary information below
+        ↓
+Detailed sections expandable/scrollable where necessary
+38. MOBILE-FIRST USABILITY
+
+On mobile:
+
+Prioritize key metrics.
+Keep company identity visible.
+Keep navigation accessible.
+Make buttons touch-friendly.
+Avoid tiny controls.
+Avoid excessive card nesting.
+Keep important actions easy to reach.
+Allow long data to scroll appropriately.
+Never force users to zoom.
+39. SPACING
+
+Use a consistent spacing system.
+
+Prefer a predictable scale such as:
+
+4px
+8px
+12px
+16px
+20px
+24px
+32px
+40px
+48px
+
+Do not use arbitrary spacing values throughout the application.
+
+Spacing should create visual hierarchy.
+
+40. BORDER RADIUS
+
+Use consistent rounded corners.
+
+Suggested approach:
+
+Small controls → small radius
+Cards → medium radius
+Large containers → medium radius
+Buttons → medium radius
+
+Avoid extremely rounded/pill-shaped UI unless it communicates a specific state.
+
+41. SHADOWS
+
+Use shadows subtly.
+
+Preferred:
+
+Very subtle shadow
++
+Light border
+
+Avoid:
+
+Strong floating shadows
+Excessive depth
+Heavy glow effects
+
+The interface should feel clean rather than flashy.
+
+42. ICONS
+
+Use a consistent icon library/style.
+
+Icons should:
+
+Have consistent size.
+Have consistent stroke weight.
+Support the meaning of the UI.
+Never replace important text when the meaning is unclear.
+
+Do not mix multiple unrelated icon styles.
+
+43. BUTTONS
+
+Primary button:
+
+Strong blue
+High contrast
+Clear label
+
+Secondary button:
+
+Outline or neutral style
+
+Danger button:
+
+Red only when destructive action is involved
+
+Avoid having too many visually dominant buttons in one section.
+
+44. INTERACTION DESIGN
+
+Interactions should feel predictable.
+
+Use:
+
+Hover states
+Focus states
+Active states
+Selected states
+Disabled states
+Loading states
+
+Interactive elements must visually communicate their current state.
+
+45. ACCESSIBILITY
+
+The interface should maintain:
+
+Good color contrast
+Keyboard accessibility
+Visible focus states
+Readable text
+Clear labels
+Accessible buttons
+Accessible form controls
+Meaningful error messages
+
+Do not rely exclusively on color to communicate status.
+
+Example:
+
+Instead of:
+
+GREEN
+
+use:
+
+✓ Good
+46. CONTENT DENSITY
+
+The application deals with financial data, so information density is necessary.
+
+However:
+
+Information density must not become information overload.
+
+Use:
+
+Clear grouping
+Progressive disclosure
+Tabs
+Sections
+Collapsible areas
+Summary → Detail hierarchy
+
+when appropriate.
+
+47. DESIGN CONSISTENCY
+
+All screens should feel like part of the same application.
 
 Maintain consistency for:
 
-- Headings
-- Section spacing
-- Tables
-- Scorecards
-- Metric presentation
-- Status indicators
-- Checklists
-- Trend visualization
-- Navigation
-- Company context
+Header
+Navigation
+Buttons
+Cards
+Tables
+Typography
+Spacing
+Colors
+Status indicators
+Score displays
+Page widths
+Responsive behavior
+48. DO NOT OVER-DESIGN
 
-The user should feel that all modules belong to one research platform.
+Avoid unnecessary:
 
----
+Gradients
+Animations
+Glowing effects
+3D cards
+Decorative illustrations
+Excessive colors
+Excessive borders
+Excessive shadows
+Unnecessary charts
+Unnecessary badges
 
-# 101. CURRENT FRONTEND DEVELOPMENT
+The application should feel premium through simplicity.
 
-The current implementation phase is frontend-only using React.
+49. ANIMATION
+
+Animations should be subtle and purposeful.
+
+Use animation for:
+
+Page transitions where appropriate
+Loading
+Expanding/collapsing
+Hover feedback
+Score transitions
+
+Avoid:
+
+Constant movement
+Large animations
+Distracting transitions
+Slow interactions
+
+Users should feel that the application is fast.
+
+50. PERFORMANCE-AWARE DESIGN
+
+The UI should remain responsive even when displaying:
+
+Large tables
+Multiple metrics
+Charts
+Long company descriptions
+Large analysis sections
+
+Avoid unnecessary rendering complexity.
+
+51. DATA-DRIVEN UI SAFETY
+
+The UI must remain visually stable when data is:
+
+Missing
+Delayed
+Longer than expected
+Shorter than expected
+Negative
+Zero
+Extremely large
+Extremely small
+
+Do not assume every value will always be available.
+
+This is especially important because the frontend will later receive data through Python APIs.
+
+52. FUTURE BACKEND COMPATIBILITY
+
+Current development is focused on the React frontend.
+
+The backend will be added in the future using Python APIs for data integration.
 
 Therefore:
 
-- Build the UI first.
-- Use mock/static data where necessary.
-- Build reusable components.
-- Build all required screens defined by the project documents.
-- Do not implement Python backend APIs now.
-- Do not implement AI now.
+Keep UI components reusable.
+Avoid tightly coupling UI to static data.
+Separate presentation from data logic where practical.
+Design loading states.
+Design error states.
+Design empty states.
+Keep future API integration in mind.
 
-Future Python API integration must be possible without redesigning the UI.
+Do not implement the Python backend during the current frontend phase unless explicitly requested.
 
----
+53. FUTURE AI
 
-# 102. VALIDATION AND EDGE CASE DESIGN
+AI functionality is planned for a future stage.
 
-Every screen must consider:
+Do not currently add:
 
-- Missing data
-- Incomplete financial history
-- Missing quarterly data
-- Missing annual data
-- Missing valuation data
-- Unsupported company type
-- Banks/NBFC Stage 1 exception
-- Invalid company search
-- No company found
-- Empty data
-- Loading state
-- Error state
+AI chatbot
+AI stock prediction
+AI recommendations
+AI-generated analysis
+AI sentiment analysis
+AI assistant
 
-Do not invent financial values when data is missing.
+unless explicitly requested later.
 
-Clearly indicate unavailable information.
+The UI should not reserve large areas for AI functionality unless the approved requirements require it.
 
----
+54. REFERENCE IMAGE FLEXIBILITY RULE
 
-# 103. NO-DATA STATE
+The two reference images are a visual starting point, not a fixed specification.
 
-When source-required information is unavailable, show:
+When implementing a screen, ask:
 
-> Data Not Available
+Does the layout match the application's purpose?
+Is the information easy to understand?
+Is the screen responsive?
+Is the content readable?
+Does the layout avoid unnecessary clutter?
+Does it follow APPFLOW.md?
+Does it follow the requirements in the source documents?
+Does it behave correctly with missing/long data?
 
-Do not display:
+If the answer requires changing the reference layout, change it.
 
-- 0
-- N/A
-- NaN
-- Fake values
+For example:
 
-unless that value is genuinely supported by the underlying data.
+If a desktop card layout becomes crowded on mobile:
 
----
+DO NOT:
+Force the desktop layout onto mobile.
 
-# 104. LIMITED HISTORY
+DO:
+Reorganize it into a mobile-friendly layout.
 
-If historical data is insufficient, clearly show that the analysis is based on the available history.
+If too many tabs exist:
 
-Do not silently pretend that missing years or quarters exist.
+DO NOT:
+Allow tabs to overlap.
 
----
+DO:
+Use scrolling, grouping, dropdowns, or another clean navigation solution.
 
-# 105. DESIGN PRIORITY
+If a table becomes too wide:
 
-When designing any screen, follow this priority:
+DO NOT:
+Break the entire page layout.
 
-1. Source content
-2. Source methodology
-3. Source metrics
-4. Source scoring
-5. Source examples
-6. Readability
-7. Navigation
-8. Visual polish
+DO:
+Adapt the table for the smaller viewport.
+55. DESIGN DECISION PRIORITY
 
-Never reverse this order.
+When different requirements conflict, use this priority:
 
-Visual design must never introduce unsupported functionality.
+1. Approved project requirements
+        ↓
+2. APPFLOW.md
+        ↓
+3. Functional usability
+        ↓
+4. Responsive behavior
+        ↓
+5. Accessibility
+        ↓
+6. DESIGN.md principles
+        ↓
+7. Reference images
 
----
+The reference images should never override actual application requirements.
 
-# 106. FINAL ANTIGRAVITY INSTRUCTION
+56. DEVELOPER DESIGN FREEDOM
 
-Before designing or implementing any screen:
+The developer/designer has permission to make reasonable design decisions when the reference images do not cover a particular screen or situation.
 
-1. Read this `DESIGN.md`.
-2. Read the supplied `YOUTUBE MASTERCOURSE PDF.pdf`.
-3. Identify which exact PDF section the screen belongs to.
-4. Use only information supported by the PDF.
-5. Do not invent financial metrics.
-6. Do not invent scoring rules.
-7. Do not invent benchmark values.
-8. Do not invent investment strategies.
-9. Do not invent technical indicators.
-10. Do not add AI.
-11. Do not add trading functionality.
-12. Do not add unsupported features.
-13. If a visual design decision is not specified by the PDF, choose a simple professional presentation without adding new functionality.
-14. Keep the UI consistent across all screens.
-15. Think about missing data and validation before implementation.
-16. Build the React frontend first.
-17. Use mock/static data where backend data is not available.
-18. Keep the frontend ready for future Python API integration.
-19. Do not move beyond the source material.
+The developer may:
 
-# MOST IMPORTANT RULE
+Rearrange sections
+Resize cards
+Change grid structure
+Adapt navigation
+Change spacing
+Change component placement
+Choose a better responsive pattern
+Simplify complex layouts
+Introduce a suitable component pattern
 
-If a feature, metric, screen, calculation, benchmark, example, or concept cannot be traced back to the supplied PDF, DO NOT ADD IT.
+provided that the result:
+
+Matches the overall design language.
+Does not contradict the requirements.
+Does not introduce unsupported functionality.
+Improves usability.
+Remains responsive.
+Remains visually consistent.
+57. FINAL DESIGN PRINCIPLE
+
+The final product should feel like:
+
+A simple, aesthetic, professional stock-analysis platform that makes complex financial information easy to understand.
+
+Do not optimize for copying the reference screenshots.
+
+Optimize for:
+
+Simple
++
+Beautiful
++
+Readable
++
+Responsive
++
+Professional
++
+Consistent
++
+User-Friendly
+
+The two reference images establish the visual direction.
+
+The final implementation should use them as inspiration while intelligently adapting every screen to its actual content and purpose.

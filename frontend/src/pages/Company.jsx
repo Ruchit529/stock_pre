@@ -267,36 +267,14 @@ export default function Company({ symbol, activeSubPage, navigate, isDarkMode = 
             <div className={`p-2.5 rounded-xl border flex items-center justify-between ${
               isDarkMode ? 'bg-[#0c111d] border-slate-800/80' : 'bg-slate-50 border-slate-200'
             }`}>
-              <span className={`font-medium text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Overall Score</span>
-              {(() => {
-                const score = company.fundamentalAnalysis?.totalScore ?? 0;
-                const maxScore = company.fundamentalAnalysis?.maxPossibleScore ?? 10;
-                let verdict = 'Avoid';
-                let badgeClass = isDarkMode 
-                  ? 'bg-rose-950/60 text-rose-400 border-rose-800/60' 
-                  : 'bg-rose-50 text-rose-600 border-rose-200';
-                if (score >= 7.0) {
-                  verdict = 'Excellent';
-                  badgeClass = isDarkMode 
-                    ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/60' 
-                    : 'bg-emerald-50 text-emerald-700 border-emerald-200';
-                } else if (score > 5.0) {
-                  verdict = 'Good';
-                  badgeClass = isDarkMode 
-                    ? 'bg-blue-950/60 text-blue-400 border-blue-800/60' 
-                    : 'bg-blue-50 text-blue-700 border-blue-200';
-                } else if (score >= 4.0) {
-                  verdict = 'Neutral';
-                  badgeClass = isDarkMode 
-                    ? 'bg-amber-950/60 text-amber-400 border-amber-800/60' 
-                    : 'bg-amber-50 text-amber-700 border-amber-200';
-                }
-                return (
-                  <span className={`font-black text-[11px] px-2 py-0.5 rounded-md border ${badgeClass}`}>
-                    {score}/{maxScore} • {verdict}
-                  </span>
-                );
-              })()}
+              <span className={`font-medium text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Scorecard Status</span>
+              <button
+                onClick={() => navigate && navigate('company', company.symbol, 'scorecard')}
+                className="px-2.5 py-1 rounded-lg bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-white border border-blue-500/20 text-[10px] font-bold transition-all cursor-pointer flex items-center gap-1"
+              >
+                <span>Run Analysis</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
             </div>
           </div>
         </div>
