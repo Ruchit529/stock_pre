@@ -5,25 +5,13 @@ import {
   ArrowLeft,
   Plus,
   Download,
-  CheckCircle2,
   ShieldCheck,
   Building,
   DollarSign,
   Crown,
-  Network,
-  Package,
-  Layers,
   Sparkles,
-  Flame,
-  ShoppingBag,
-  Wifi,
-  CreditCard,
-  Percent,
-  Award,
-  TrendingUp,
   Search,
   Check,
-  ChevronRight,
   BarChart3,
   Loader2
 } from 'lucide-react';
@@ -34,6 +22,8 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
     return localStorage.getItem('stock_analysis_active_tab') || 'overview';
   });
   const [fundSubTab, setFundSubTab] = useState('stage1');
+  const [bsSubTab, setBsSubTab] = useState('all');
+  const [userMoatAnswers, setUserMoatAnswers] = useState({});
   const [hasRunAnalysis, setHasRunAnalysis] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStep, setAnalysisStep] = useState('');
@@ -293,13 +283,42 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
     }
   };
 
+  const defaultBusinessModel = {
+    valueCreation: 'High-margin decorative paint formulations with extensive tinting machine installation at 70,000+ retail dealerships across India.',
+    valueCapture: 'Direct dealer pricing power with daily delivery logistics, eliminating wholesale middleman margin leakage.',
+    scalability: 'High',
+    scalabilityDesc: 'Low incremental capital required per new dealer tinting machine; manufacturing capacity scales linearly.',
+    operatingLeverage: 'Moderate-High',
+    pricingPower: 'Strong — able to pass raw material (crude derivative) cost hikes to end consumers within 30-60 days.'
+  };
+
+  const defaultMoatAnalysis = {
+    moatRating: 'Wide Moat',
+    primaryMoatType: 'Brand Moat & Distribution Network',
+    moatSources: [
+      { type: 'Brand Equity', desc: 'Household brand recognition in India with top consumer mindshare and premium positioning.' },
+      { type: 'Distribution Network', desc: '70,000+ dealers equipped with proprietary color tinting machines creating high entry barrier.' },
+      { type: 'Cost Advantage', desc: 'Massive raw material procurement scale and supply chain logistics (3-4 deliveries/day directly to dealers).' }
+    ],
+    moatTests: [
+      { test: 'Does the company have a recognized brand with pricing power?', answer: 'Yes', explanation: 'Holds dominant market share and routinely raises prices when raw material costs spike.' },
+      { test: 'Are there high switching costs or network effects for customers/dealers?', answer: 'Yes', explanation: 'Dealers install tinting machines requiring floor space & capital, making switching disincentivized.' },
+      { test: 'Does the company possess cost advantage over smaller competitors?', answer: 'Yes', explanation: 'Massive procurement scale and supply chain logistics lower per-unit distribution costs.' },
+      { test: 'Is the business protected by regulatory barriers or patents?', answer: 'Unclear', explanation: 'Standard environmental compliance applies; primary advantage is distribution scale rather than patents.' },
+      { test: 'Is the MOAT sustainable for the next 10+ years?', answer: 'Yes', explanation: 'Distribution footprint, brand equity, and expansion into home décor solidify long-term competitive advantage.' }
+    ],
+    sustainabilityVerdict: 'Strong & Expanding Moat'
+  };
+
+  const bModel = selectedCompany.businessModel || defaultBusinessModel;
+  const moat = selectedCompany.moatAnalysis || defaultMoatAnalysis;
+
+  const isBusinessSectorActive = ['business-sector', 'business', 'sector', 'business-model', 'moat'].includes(activeTab);
+
   const tabs = [
     { id: 'overview', label: 'Overview' },
-    { id: 'business', label: 'Business' },
-    { id: 'sector', label: 'Sector' },
+    { id: 'business-sector', label: 'Business Analysis' },
     { id: 'fundamentals', label: 'Fundamentals' },
-    { id: 'business-model', label: 'Business Model' },
-    { id: 'moat', label: 'MOAT' },
     { id: 'valuation', label: 'Valuation' },
     { id: 'entry-exit', label: 'Entry/Exit' },
     { id: 'portfolio', label: 'Portfolio' },
@@ -374,7 +393,7 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
         {/* Horizontal Navigation Sub-Tabs */}
         <div className={`flex items-center gap-1 overflow-x-auto pt-2 border-t scrollbar-hide ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
           {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
+            const isActive = activeTab === tab.id || (tab.id === 'business-sector' && isBusinessSectorActive);
             return (
               <button
                 key={tab.id}
@@ -524,137 +543,358 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
         </div>
       )}
 
-      {/* 3. TAB 2: BUSINESS ANALYSIS SCREEN */}
-      {activeTab === 'business' && (
-        <div className="space-y-6">
-          <div className={`p-6 rounded-2xl border space-y-6 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
-            <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>What the Business Does</h3>
-            <p className={`text-xs leading-relaxed font-normal ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              {business.whatBusinessDoes || selectedCompany.overview}
-            </p>
-
-            <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
-              <div className={`p-4 rounded-xl border space-y-1 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
-                <span className={`text-[10px] font-bold uppercase block ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Products / Services</span>
-                <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{business.productsServices}</p>
+      {/* 3. CONSOLIDATED MENU TAB: BUSINESS, SECTOR, BUSINESS MODEL & MOAT ANALYSIS */}
+      {isBusinessSectorActive && (
+        <div className="space-y-5">
+          {/* Top Sub-Navigation Filter Pills inside Business, Sector & MOAT Menu */}
+          <div className={`p-3.5 rounded-2xl border flex flex-wrap items-center justify-between gap-3 ${
+            isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'
+          }`}>
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-sky-500/10 text-sky-500 border border-sky-500/20 flex items-center justify-center font-bold">
+                <Building className="w-4 h-4" />
               </div>
-
-              <div className={`p-4 rounded-xl border space-y-1 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
-                <span className={`text-[10px] font-bold uppercase block ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Customer</span>
-                <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{business.customer}</p>
-              </div>
-
-              <div className={`p-4 rounded-xl border space-y-1 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
-                <span className={`text-[10px] font-bold uppercase block ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Problem Solved</span>
-                <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{business.problemSolved}</p>
+              <div>
+                <h3 className={`font-bold text-xs ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  Business Analysis (Business, Sector, Model & MOAT)
+                </h3>
+                <p className="text-[11px] text-slate-400 font-medium">
+                  Integrated qualitative engine for value creation, industry positioning & competitive advantage
+                </p>
               </div>
             </div>
 
-            {/* How the Business Makes Money */}
-            <div className={`pt-4 border-t space-y-4 ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
-              <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>How the Business Makes Money</h4>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {(business.howBusinessMakesMoney || []).map((item, idx) => (
-                  <div key={idx} className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center space-y-2 ${
-                    isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'
-                  }`}>
-                    <div className="w-8 h-8 rounded-full bg-sky-600/10 text-sky-600 flex items-center justify-center">
-                      <DollarSign className="w-4 h-4" />
-                    </div>
-                    <span className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Business Type */}
-            <div className={`pt-4 border-t flex items-center justify-between ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
-              <span className={`text-xs font-bold uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Business Type</span>
-              <span className="px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-600 font-bold text-xs border border-emerald-500/20">
-                {selectedCompany.businessType}
-              </span>
+            {/* Quick Sub-Filter Pills */}
+            <div className={`flex flex-wrap items-center gap-1 p-1 rounded-xl border ${isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-100/80 border-slate-200'}`}>
+              {[
+                { id: 'all', label: 'All 4 Sections' },
+                { id: 'business', label: 'Business Profile' },
+                { id: 'sector', label: 'Sector & Peers' },
+                { id: 'business-model', label: 'Business Model' },
+                { id: 'moat', label: 'MOAT Analysis' }
+              ].map((subItem) => (
+                <button
+                  key={subItem.id}
+                  onClick={() => setBsSubTab(subItem.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    bsSubTab === subItem.id
+                      ? 'bg-sky-600 text-white shadow-xs'
+                      : isDarkMode
+                        ? 'text-slate-400 hover:text-white'
+                        : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {subItem.label}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      )}
 
-      {/* 4. TAB 3: SECTOR ANALYSIS SCREEN */}
-      {activeTab === 'sector' && (
-        <div className="space-y-6">
-          <div className={`p-6 rounded-2xl border space-y-6 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
-            {/* Sector Classification */}
-            <div className="space-y-3">
-              <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Sector Classification</h3>
+          {/* 1. BUSINESS PROFILE SECTION */}
+          {(bsSubTab === 'all' || bsSubTab === 'business') && (
+            <div className={`p-6 rounded-2xl border space-y-6 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-sky-500" />
+                  <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>1. Business Overview & Operations</h3>
+                </div>
+                <span className="px-3 py-1 rounded-md bg-emerald-500/10 text-emerald-600 font-bold text-xs border border-emerald-500/20">
+                  {selectedCompany.businessType || business.businessType || 'Product Based'}
+                </span>
+              </div>
+
+              <p className={`text-xs leading-relaxed font-normal ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                {business.whatBusinessDoes || selectedCompany.overview}
+              </p>
+
+              <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
+                <div className={`p-4 rounded-xl border space-y-1 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
+                  <span className={`text-[10px] font-bold uppercase block ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Products / Services</span>
+                  <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{business.productsServices || 'Core commercial offerings'}</p>
+                </div>
+
+                <div className={`p-4 rounded-xl border space-y-1 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
+                  <span className={`text-[10px] font-bold uppercase block ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Target Customer</span>
+                  <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{business.customer || 'Enterprise & retail consumers'}</p>
+                </div>
+
+                <div className={`p-4 rounded-xl border space-y-1 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
+                  <span className={`text-[10px] font-bold uppercase block ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Problem Solved</span>
+                  <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{business.problemSolved || 'Core market problem resolution'}</p>
+                </div>
+              </div>
+
+              {/* How the Business Makes Money */}
+              <div className={`pt-4 border-t space-y-4 ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
+                <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Revenue Generation Streams</h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {(business.howBusinessMakesMoney || [
+                    { label: 'Core Product Revenue', icon: 'DollarSign' },
+                    { label: 'Premium Margin Line', icon: 'Crown' },
+                    { label: 'Distribution Channel', icon: 'Network' },
+                    { label: 'Value Added Services', icon: 'Package' }
+                  ]).map((item, idx) => (
+                    <div key={idx} className={`p-4 rounded-xl border flex flex-col items-center justify-center text-center space-y-2 ${
+                      isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'
+                    }`}>
+                      <div className="w-8 h-8 rounded-full bg-sky-600/10 text-sky-600 flex items-center justify-center">
+                        <DollarSign className="w-4 h-4" />
+                      </div>
+                      <span className={`text-xs font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 2. SECTOR ANALYSIS SECTION */}
+          {(bsSubTab === 'all' || bsSubTab === 'sector') && (
+            <div className={`p-6 rounded-2xl border space-y-6 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>2. Sector Dynamics & Peer Benchmarking</h3>
+              </div>
+
+              {/* Sector Classification */}
+              <div className="space-y-3">
+                <div className={`p-4 rounded-xl border flex items-center gap-4 ${
+                  isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'
+                }`}>
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 flex items-center justify-center font-bold shrink-0">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className={`text-sm font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                      {sector.sectorType || selectedCompany.sector} Sector ({selectedCompany.industry || 'Industry'})
+                    </div>
+                    <p className={`text-xs font-normal ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                      {sector.classificationDescription || 'Consistent demand profile with strong industry tailwinds.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Market Condition Allocation Table */}
+              <div className={`space-y-3 pt-4 border-t ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
+                <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Market Condition Allocation (Reference)</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left">
+                    <thead>
+                      <tr className={`border-b text-[10px] uppercase font-bold ${
+                        isDarkMode ? 'border-slate-800 text-slate-400' : 'border-sky-100 text-slate-500'
+                      }`}>
+                        <th className="pb-2">Market Condition</th>
+                        <th className="pb-2">Cyclical</th>
+                        <th className="pb-2">Growth</th>
+                        <th className="pb-2">Defensive</th>
+                      </tr>
+                    </thead>
+                    <tbody className={`divide-y font-semibold ${
+                      isDarkMode ? 'divide-slate-800/60 text-slate-300' : 'divide-sky-100 text-slate-700'
+                    }`}>
+                      <tr><td className="py-2.5">Bull Market</td><td>40%</td><td>30%</td><td>30%</td></tr>
+                      <tr><td className="py-2.5">Bear Market</td><td>10%</td><td>30%</td><td>60%</td></tr>
+                      <tr><td className="py-2.5">Normal Market</td><td>30%</td><td>30%</td><td>40%</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Sector Peers */}
+              <div className={`space-y-3 pt-4 border-t ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
+                <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Sector Peer Comparison</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left">
+                    <thead>
+                      <tr className={`border-b text-[10px] uppercase font-bold ${
+                        isDarkMode ? 'border-slate-800 text-slate-400' : 'border-sky-100 text-slate-500'
+                      }`}>
+                        <th className="pb-2">Company</th>
+                        <th className="pb-2">M.Cap (Cr.)</th>
+                        <th className="pb-2">P/E</th>
+                        <th className="pb-2">ROE (%)</th>
+                      </tr>
+                    </thead>
+                    <tbody className={`divide-y font-semibold ${
+                      isDarkMode ? 'divide-slate-800/60' : 'divide-sky-100'
+                    }`}>
+                      {(sector.peers || [
+                        { company: selectedCompany.name, mcap: selectedCompany.marketCapValue?.toLocaleString('en-IN') || '3,01,234', pe: selectedCompany.keyMetrics?.pe || '48.2', roe: `${selectedCompany.keyMetrics?.roe || 28.6}%`, active: true },
+                        { company: 'Competitor A', mcap: '85,412', pe: '42.1', roe: '24.3%', active: false },
+                        { company: 'Competitor B', mcap: '57,856', pe: '38.6', roe: '21.7%', active: false }
+                      ]).map((peer, idx) => (
+                        <tr key={idx} className={peer.active ? (isDarkMode ? 'text-emerald-400 font-bold' : 'text-emerald-600 font-bold') : (isDarkMode ? 'text-slate-300' : 'text-slate-700')}>
+                          <td className="py-2.5">{peer.company}</td>
+                          <td className="py-2.5">₹{peer.mcap}</td>
+                          <td className="py-2.5">{peer.pe}</td>
+                          <td className="py-2.5">{peer.roe}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 3. BUSINESS MODEL SECTION */}
+          {(bsSubTab === 'all' || bsSubTab === 'business-model') && (
+            <div className={`p-6 rounded-2xl border space-y-6 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                  <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>3. Business Model & Value Engine</h3>
+                </div>
+                <span className="px-3 py-1 rounded-md bg-sky-500/10 text-sky-500 font-bold text-xs border border-sky-500/20">
+                  Scalability: {bModel.scalability || 'High'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className={`p-4 rounded-xl border space-y-2 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
+                  <span className="text-[10px] font-bold uppercase text-sky-500 block">Value Creation Strategy</span>
+                  <p className={`text-xs leading-relaxed font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
+                    {bModel.valueCreation}
+                  </p>
+                </div>
+
+                <div className={`p-4 rounded-xl border space-y-2 ${isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'}`}>
+                  <span className="text-[10px] font-bold uppercase text-emerald-500 block">Value Capture Mechanism</span>
+                  <p className={`text-xs leading-relaxed font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
+                    {bModel.valueCapture}
+                  </p>
+                </div>
+              </div>
+
+              {/* Business Model Metrics */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <div className={`p-4 rounded-xl border space-y-1.5 ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Scalability Rating</span>
+                  <span className="text-sm font-extrabold text-emerald-500 block">{bModel.scalability}</span>
+                  <p className="text-[11px] text-slate-400">{bModel.scalabilityDesc}</p>
+                </div>
+
+                <div className={`p-4 rounded-xl border space-y-1.5 ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Operating Leverage</span>
+                  <span className="text-sm font-extrabold text-sky-400 block">{bModel.operatingLeverage}</span>
+                  <p className="text-[11px] text-slate-400">Fixed overheads dilute as volume expands.</p>
+                </div>
+
+                <div className={`p-4 rounded-xl border space-y-1.5 ${isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block">Pricing Power</span>
+                  <span className="text-sm font-extrabold text-amber-400 block">{bModel.pricingPower}</span>
+                  <p className="text-[11px] text-slate-400">Protects margins during raw material cost spikes.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 4. MOAT ANALYSIS SECTION */}
+          {(bsSubTab === 'all' || bsSubTab === 'moat') && (
+            <div className={`p-6 rounded-2xl border space-y-6 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <h3 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>4. Economic MOAT & Competitive Advantage</h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-3 py-1 rounded-md bg-emerald-500/15 text-emerald-400 font-extrabold text-xs border border-emerald-500/30">
+                    {moat.moatRating || 'Wide Moat'}
+                  </span>
+                  <span className="px-3 py-1 rounded-md bg-purple-500/10 text-purple-400 font-bold text-xs border border-purple-500/20">
+                    {moat.sustainabilityVerdict || 'Sustainable Moat'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Primary Moat Pillar */}
               <div className={`p-4 rounded-xl border flex items-center gap-4 ${
-                isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'
+                isDarkMode ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-emerald-50 border-emerald-200'
               }`}>
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 flex items-center justify-center font-bold shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold shrink-0">
+                  <Crown className="w-5 h-5 text-emerald-400" />
                 </div>
                 <div>
-                  <div className={`text-sm font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{sector.sectorType || selectedCompany.sector}</div>
-                  <p className={`text-xs font-normal ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{sector.classificationDescription || 'Consistent demand, not highly affected by economic cycles.'}</p>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-500 block">Primary Moat Classification</span>
+                  <h4 className={`text-sm font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{moat.primaryMoatType}</h4>
+                </div>
+              </div>
+
+              {/* Moat Sources Grid */}
+              <div className="space-y-3">
+                <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Moat Pillars & Entry Barriers</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {(moat.moatSources || []).map((source, idx) => (
+                    <div key={idx} className={`p-4 rounded-xl border space-y-1.5 ${
+                      isDarkMode ? 'bg-slate-900/60 border-slate-800' : 'bg-[#f4f9ff] border-sky-100'
+                    }`}>
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <h5 className={`text-xs font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{source.type}</h5>
+                      </div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">{source.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 5 Qualitative Moat Test Questions */}
+              <div className={`pt-4 border-t space-y-4 ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
+                <div className="flex items-center justify-between">
+                  <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>5-Parameter Moat Assessment Audit</h4>
+                  <span className="text-[11px] text-slate-400 font-medium">Click answer pill to toggle qualitative assessment</span>
+                </div>
+
+                <div className="space-y-3">
+                  {(moat.moatTests || []).map((testItem, idx) => {
+                    const currentAnswer = userMoatAnswers[idx] || testItem.answer;
+
+                    return (
+                      <div key={idx} className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                        isDarkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'
+                      }`}>
+                        <div className="space-y-1 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-bold flex items-center justify-center shrink-0">
+                              Q{idx + 1}
+                            </span>
+                            <span className={`text-xs font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
+                              {testItem.test}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-400 pl-7">{testItem.explanation}</p>
+                        </div>
+
+                        {/* Interactive Answer Switcher */}
+                        <div className="flex items-center gap-1 self-end sm:self-center shrink-0">
+                          {['Yes', 'No', 'Unclear'].map((opt) => (
+                            <button
+                              key={opt}
+                              onClick={() => setUserMoatAnswers(prev => ({ ...prev, [idx]: opt }))}
+                              className={`px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer ${
+                                currentAnswer === opt
+                                  ? opt === 'Yes'
+                                    ? 'bg-emerald-500 text-white shadow-xs'
+                                    : opt === 'No'
+                                      ? 'bg-rose-500 text-white shadow-xs'
+                                      : 'bg-amber-500 text-white shadow-xs'
+                                  : isDarkMode
+                                    ? 'bg-slate-800 text-slate-400 hover:text-white'
+                                    : 'bg-slate-200 text-slate-600 hover:text-slate-900'
+                              }`}
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
-
-            {/* Market Condition Allocation */}
-            <div className={`space-y-3 pt-4 border-t ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
-              <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Market Condition Allocation (Reference)</h4>
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left">
-                  <thead>
-                    <tr className={`border-b text-[10px] uppercase font-bold ${
-                      isDarkMode ? 'border-slate-800 text-slate-400' : 'border-sky-100 text-slate-500'
-                    }`}>
-                      <th className="pb-2">Market Condition</th>
-                      <th className="pb-2">Cyclical</th>
-                      <th className="pb-2">Growth</th>
-                      <th className="pb-2">Defensive</th>
-                    </tr>
-                  </thead>
-                  <tbody className={`divide-y font-semibold ${
-                    isDarkMode ? 'divide-slate-800/60 text-slate-300' : 'divide-sky-100 text-slate-700'
-                  }`}>
-                    <tr><td className="py-2.5">Bull Market</td><td>40%</td><td>30%</td><td>30%</td></tr>
-                    <tr><td className="py-2.5">Bear Market</td><td>10%</td><td>30%</td><td>60%</td></tr>
-                    <tr><td className="py-2.5">Normal Market</td><td>30%</td><td>30%</td><td>40%</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Sector Peers */}
-            <div className={`space-y-3 pt-4 border-t ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
-              <h4 className={`font-bold text-xs uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Peers</h4>
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left">
-                  <thead>
-                    <tr className={`border-b text-[10px] uppercase font-bold ${
-                      isDarkMode ? 'border-slate-800 text-slate-400' : 'border-sky-100 text-slate-500'
-                    }`}>
-                      <th className="pb-2">Company</th>
-                      <th className="pb-2">M.Cap (Cr.)</th>
-                      <th className="pb-2">P/E</th>
-                      <th className="pb-2">ROE (%)</th>
-                    </tr>
-                  </thead>
-                  <tbody className={`divide-y font-semibold ${
-                    isDarkMode ? 'divide-slate-800/60' : 'divide-sky-100'
-                  }`}>
-                    {(sector.peers || []).map((peer, idx) => (
-                      <tr key={idx} className={peer.active ? (isDarkMode ? 'text-emerald-400 font-bold' : 'text-emerald-600 font-bold') : (isDarkMode ? 'text-slate-300' : 'text-slate-700')}>
-                        <td className="py-2.5">{peer.company}</td>
-                        <td className="py-2.5">₹{peer.mcap}</td>
-                        <td className="py-2.5">{peer.pe}</td>
-                        <td className="py-2.5">{peer.roe}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -1055,14 +1295,14 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
       )}
 
       {/* Default View for other sub-tabs */}
-      {!['overview', 'business', 'sector', 'fundamentals', 'valuation'].includes(activeTab) && (
+      {!['overview', 'business-sector', 'business', 'sector', 'business-model', 'moat', 'fundamentals', 'valuation'].includes(activeTab) && (
         <div className={`p-12 rounded-2xl border text-center space-y-3 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
           <Sparkles className="w-8 h-8 text-blue-500 mx-auto" />
           <h4 className={`font-bold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
             {tabs.find(t => t.id === activeTab)?.label} Module
           </h4>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Analysis section is structured and ready. Select Overview, Business, Sector, Fundamentals, or Valuation tabs to inspect detailed reference screens.
+            Analysis section is structured and ready. Select Overview, Business Analysis, Fundamentals, or Valuation tabs to inspect detailed screens.
           </p>
         </div>
       )}

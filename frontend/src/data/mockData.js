@@ -248,6 +248,31 @@ export const PDF_COMPANIES = [
         { company: 'Kansai Nerolac', mcap: '57,856', pe: '38.6', roe: '21.7%', active: false }
       ]
     },
+    businessModel: {
+      valueCreation: 'High-margin decorative paint formulations with extensive tinting machine installation at 70,000+ retail dealerships across India.',
+      valueCapture: 'Direct dealer pricing power with daily delivery logistics, eliminating wholesale middleman margin leakage.',
+      scalability: 'High',
+      scalabilityDesc: 'Low incremental capital required per new dealer tinting machine; manufacturing capacity scales linearly.',
+      operatingLeverage: 'Moderate-High',
+      pricingPower: 'Strong — able to pass raw material (crude derivative) cost hikes to end consumers within 30-60 days.'
+    },
+    moatAnalysis: {
+      moatRating: 'Wide Moat',
+      primaryMoatType: 'Brand Moat & Distribution Network',
+      moatSources: [
+        { type: 'Brand Equity', desc: 'Household brand recognition in India with top consumer mindshare and premium positioning.' },
+        { type: 'Distribution Network', desc: '70,000+ dealers equipped with proprietary color tinting machines creating high entry barrier.' },
+        { type: 'Cost Advantage', desc: 'Massive raw material procurement scale and supply chain logistics (3-4 deliveries/day directly to dealers).' }
+      ],
+      moatTests: [
+        { test: 'Does the company have a recognized brand with pricing power?', answer: 'Yes', explanation: 'Asian Paints commands 50%+ decorative paint market share and routinely raises prices when raw material costs spike.' },
+        { test: 'Are there high switching costs or network effects for customers/dealers?', answer: 'Yes', explanation: 'Dealers install Asian Paints tinting machines requiring floor space & capital, making switching disincentivized.' },
+        { test: 'Does the company possess cost advantage over smaller competitors?', answer: 'Yes', explanation: 'Massive procurement scale and AI-driven supply chain give Asian Paints lower per-liter distribution costs.' },
+        { test: 'Is the business protected by regulatory barriers or patents?', answer: 'Unclear', explanation: 'Paint industry has standard environmental compliance, but primary barrier is distribution scale rather than patents.' },
+        { test: 'Is the MOAT sustainable for the next 10+ years?', answer: 'Yes', explanation: 'Distribution footprint, brand equity, and expansion into home décor solidify long-term competitive advantage.' }
+      ],
+      sustainabilityVerdict: 'Strong & Expanding Moat'
+    },
     fundamentalAnalysis: {
       stage1Score: 8.5,
       stage1Verdict: 'Excellent',
@@ -288,6 +313,52 @@ export const PDF_COMPANIES = [
     overview: 'Tata Consultancy Services is an IT services, consulting and business solutions organization that has been partnering with many of the world’s largest businesses for over 50 years.',
     keyMetrics: { pe: 31.5, roe: 48.2, roce: 59.1, opm: 24.5, debtToEquity: 0.04, peg: 1.45 },
     scoresSnapshot: { growth: 85, profitability: 96, efficiency: 95, financialHealth: 98, valuation: 72, quality: 96 },
+    businessAnalysis: {
+      businessType: 'Service Based',
+      description: 'Tata Consultancy Services is a global leader in IT services, digital transformation, and consulting.',
+      whatBusinessDoes: 'Partners with Fortune 500 enterprises for cloud transformation, enterprise software development, and AI solutions.',
+      productsServices: 'Cloud Services, Cognitive Business Operations, Enterprise Applications, Cybersecurity, AI Solutions',
+      customer: 'Global Banking & Financial Institutions, Retail, Healthcare, Tech Platforms',
+      problemSolved: 'Modernizes legacy IT architecture and drives digital business transformation.',
+      howBusinessMakesMoney: [
+        { label: 'Long-term IT Contracts', icon: 'DollarSign' },
+        { label: 'Consulting & Implementation', icon: 'Crown' },
+        { label: 'Cloud Managed Services', icon: 'Network' },
+        { label: 'Software IP & Platforms', icon: 'Package' }
+      ]
+    },
+    sectorAnalysis: {
+      sectorType: 'Growth',
+      classificationDescription: 'High cash-flow generation with strong global tech spending tailwinds.',
+      peers: [
+        { company: 'TCS', mcap: '14,80,000', pe: '31.5', roe: '48.2%', active: true },
+        { company: 'Infosys', mcap: '6,02,000', pe: '24.5', roe: '31.8%', active: false },
+        { company: 'HCL Tech', mcap: '3,85,000', pe: '25.8', roe: '23.4%', active: false }
+      ]
+    },
+    businessModel: {
+      valueCreation: 'Global delivery model leveraging 600,000+ skilled IT engineers to build mission-critical enterprise platforms.',
+      valueCapture: 'Multi-year master service agreements (MSAs) with high renewal rates and high-margin recurring revenues.',
+      scalability: 'Very High',
+      scalabilityDesc: 'Software and platform assets scale infinitely with minimal incremental capital outlay.',
+      operatingLeverage: 'High',
+      pricingPower: 'Strong — high client stickiness allows pricing stability during technology transitions.'
+    },
+    moatAnalysis: {
+      moatRating: 'Wide Moat',
+      primaryMoatType: 'High Switching Costs & Scale Economies',
+      moatSources: [
+        { type: 'High Switching Costs', desc: 'Mission-critical core systems integrated deep into client business operations.' },
+        { type: 'Scale Advantage', desc: '600k+ workforce enables rapid execution of mega multi-billion-dollar IT deals.' },
+        { type: 'Brand & Relationship Moat', desc: '50+ years of trust with 98%+ client retention rate.' }
+      ],
+      moatTests: [
+        { test: 'Does the company have high switching costs for enterprise clients?', answer: 'Yes', explanation: 'Replacing core IT operations introduces enormous business disruption risks for enterprise clients.' },
+        { test: 'Does the company possess cost advantage over smaller IT vendors?', answer: 'Yes', explanation: 'Global offshore delivery network yields industry-leading operating profit margins (24-25%).' },
+        { test: 'Is the MOAT sustainable for the next 10+ years?', answer: 'Yes', explanation: 'Continuous reinvestment in AI, Cloud, and deep enterprise relationships protect competitive advantage.' }
+      ],
+      sustainabilityVerdict: 'Wide & Durable Tech Moat'
+    },
     fundamentalAnalysis: { stage1Score: 8.5, stage1Verdict: 'Excellent', stage2Score: 8.2, stage2Verdict: 'Excellent', totalScore: 8.5 }
   },
   {
@@ -305,6 +376,52 @@ export const PDF_COMPANIES = [
     overview: 'HDFC Bank Limited is India’s largest private sector bank by assets.',
     keyMetrics: { pe: 18.2, roe: 16.5, roce: 0, opm: 0, debtToEquity: null, peg: 1.04 },
     scoresSnapshot: { growth: 85, profitability: 88, efficiency: 90, financialHealth: 95, valuation: 82, quality: 92 },
+    businessAnalysis: {
+      businessType: 'Service Based',
+      description: 'HDFC Bank is India’s largest private sector bank offering retail, corporate, and investment banking.',
+      whatBusinessDoes: 'Provides credit loans, low-cost deposit accounts (CASA), credit cards, and digital financial services.',
+      productsServices: 'Retail Credit, Commercial Banking, CASA Deposit Accounts, Credit Cards, Wealth Management',
+      customer: 'Retail Borrowers, Salaried Professionals, Corporates, MSMEs',
+      problemSolved: 'Provides trusted, low-cost financial access, capital loans, and secure payment processing.',
+      howBusinessMakesMoney: [
+        { label: 'Net Interest Margin (NIM)', icon: 'DollarSign' },
+        { label: 'Credit Card & Payment Fees', icon: 'Crown' },
+        { label: 'Loan Processing Fees', icon: 'Network' },
+        { label: 'Wealth Management Fees', icon: 'Package' }
+      ]
+    },
+    sectorAnalysis: {
+      sectorType: 'Defensive / Growth',
+      classificationDescription: 'Systemically important bank with steady credit growth and low-cost CASA deposit base.',
+      peers: [
+        { company: 'HDFC Bank', mcap: '12,30,000', pe: '18.2', roe: '16.5%', active: true },
+        { company: 'ICICI Bank', mcap: '7,89,000', pe: '17.8', roe: '18.2%', active: false },
+        { company: 'Axis Bank', mcap: '3,45,000', pe: '14.2', roe: '15.8%', active: false }
+      ]
+    },
+    businessModel: {
+      valueCreation: 'Gather low-cost CASA deposits across 8,000+ branch networks and deploy into high-quality retail & corporate credit.',
+      valueCapture: 'Wide Net Interest Margin (3.8% - 4.1%) maintained via low cost of funds.',
+      scalability: 'High',
+      scalabilityDesc: 'Digital banking channels (Mobile & UPI) scale cost-efficiently across millions of account holders.',
+      operatingLeverage: 'High',
+      pricingPower: 'Strong — low deposit cost gives unmatched competitive lending rates.'
+    },
+    moatAnalysis: {
+      moatRating: 'Wide Moat',
+      primaryMoatType: 'Low-Cost CASA Deposit Franchise & Brand Trust',
+      moatSources: [
+        { type: 'Cost Advantage (CASA)', desc: 'Large low-cost deposit base yields lowest cost of capital among private banks.' },
+        { type: 'Branch & Digital Distribution', desc: '8,000+ branches and dominant credit card market share in India.' },
+        { type: 'Risk Management Track Record', desc: 'Consistently lowest gross NPAs across credit cycles over 25+ years.' }
+      ],
+      moatTests: [
+        { test: 'Does the bank possess cost advantage in deposit gathering?', answer: 'Yes', explanation: 'CASA ratio > 38% provides low-cost funding advantage rivals cannot duplicate easily.' },
+        { test: 'Are there high switching costs for bank account customers?', answer: 'Yes', explanation: 'Direct deposit salary accounts and auto-debit bill payments create strong account retention.' },
+        { test: 'Is the MOAT sustainable for the next 10+ years?', answer: 'Yes', explanation: 'Scale, brand equity, and credit underwriting discipline protect long-term market dominance.' }
+      ],
+      sustainabilityVerdict: 'Wide Financial Franchise Moat'
+    },
     fundamentalAnalysis: { stage1Score: 8.2, stage1Verdict: 'Excellent', stage2Score: 8.5, stage2Verdict: 'Exceptional', totalScore: 8.2 }
   },
   {
@@ -322,6 +439,52 @@ export const PDF_COMPANIES = [
     overview: 'Reliance Industries Limited is an integrated energy, materials, retail, and digital services conglomerate.',
     keyMetrics: { pe: 26.8, roe: 12.8, roce: 11.4, opm: 17.2, debtToEquity: 0.42, peg: 1.82 },
     scoresSnapshot: { growth: 78, profitability: 75, efficiency: 72, financialHealth: 82, valuation: 70, quality: 85 },
+    businessAnalysis: {
+      businessType: 'Asset Based',
+      description: 'Reliance Industries is India’s largest corporate conglomerate spanning Oil-to-Chemicals (O2C), Jio Digital, and Reliance Retail.',
+      whatBusinessDoes: 'Refines crude oil, manufactures petrochemicals, operates India’s largest telecom network (Jio), and nationwide retail stores.',
+      productsServices: 'Petrochemicals & Fuels, Jio 5G Connectivity, Reliance Retail Stores, Digital Services, New Energy Solutions',
+      customer: '450M+ Jio Subscribers, 18,000+ Retail Stores Footfall, Global Industrial Clients',
+      problemSolved: 'Provides affordable digital data connectivity, consumer retail access, and energy security.',
+      howBusinessMakesMoney: [
+        { label: 'Oil refining & Petrochemical margins', icon: 'DollarSign' },
+        { label: 'Jio Telecom monthly subscriptions', icon: 'Crown' },
+        { label: 'Reliance Retail store sales', icon: 'Network' },
+        { label: 'Digital platforms & Media', icon: 'Package' }
+      ]
+    },
+    sectorAnalysis: {
+      sectorType: 'Cyclical / Growth',
+      classificationDescription: 'Integrated conglomerate blending cash-generating O2C energy with high-growth Telecom & Retail.',
+      peers: [
+        { company: 'Reliance Ind.', mcap: '20,20,000', pe: '26.8', roe: '12.8%', active: true },
+        { company: 'TCS', mcap: '14,80,000', pe: '31.5', roe: '48.2%', active: false },
+        { company: 'HDFC Bank', mcap: '12,30,000', pe: '18.2', roe: '16.5%', active: false }
+      ]
+    },
+    businessModel: {
+      valueCreation: 'Build world-scale infrastructure assets (Jamnagar refinery, nationwide 5G tower grid) to dominate core markets.',
+      valueCapture: 'Captures consumer spend across Telecom (ARPU growth), Retail commerce, and high refining margins.',
+      scalability: 'High',
+      scalabilityDesc: 'Jio digital network scales near zero marginal cost per additional data gigabyte.',
+      operatingLeverage: 'Very High',
+      pricingPower: 'Strong in Telecom & Retail due to market leadership.'
+    },
+    moatAnalysis: {
+      moatRating: 'Wide Moat',
+      primaryMoatType: 'Scale Economies & Network Effects (Jio)',
+      moatSources: [
+        { type: 'Scale & Capital Barriers', desc: '$100B+ invested in refining scale and 5G infrastructure creates unassailable capital barrier.' },
+        { type: 'Network Effects', desc: '450M+ Jio subscribers form India’s largest digital ecosystem.' },
+        { type: 'Retail Footprint Moat', desc: '18,000+ retail stores covering Tier 1 to Tier 4 Indian cities.' }
+      ],
+      moatTests: [
+        { test: 'Does the company possess capital scale advantages over rivals?', answer: 'Yes', explanation: 'Massive balance sheet enables multi-billion-dollar investments in 5G and Green Energy.' },
+        { test: 'Is the business protected by high entry barriers?', answer: 'Yes', explanation: 'Capital intensity of Jamnagar refinery and nationwide telecom spectrum deters new competitors.' },
+        { test: 'Is the MOAT sustainable for the next 10+ years?', answer: 'Yes', explanation: 'Pivoting from traditional oil-to-chemicals into Jio Digital, Retail, and Green Hydrogen.' }
+      ],
+      sustainabilityVerdict: 'Wide Conglomerate Moat'
+    },
     fundamentalAnalysis: { stage1Score: 7.1, stage1Verdict: 'Good', stage2Score: 7.0, stage2Verdict: 'Good', totalScore: 7.1 }
   },
   {
