@@ -36,7 +36,7 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
     return localStorage.getItem('stock_analysis_active_tab') || 'overview';
   });
   const [fundSubTab, setFundSubTab] = useState('stage1');
-  const [bsSubTab, setBsSubTab] = useState('all');
+  const [bsSubTab, setBsSubTab] = useState('business');
   const [userMoatAnswers, setUserMoatAnswers] = useState({});
   const [hasRunAnalysis, setHasRunAnalysis] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -792,7 +792,6 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
             {/* Quick Sub-Filter Pills */}
             <div className={`flex flex-wrap items-center gap-1 p-1 rounded-xl border ${isDarkMode ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-100/80 border-slate-200'}`}>
               {[
-                { id: 'all', label: 'All 4 Sections' },
                 { id: 'business', label: 'Business Profile' },
                 { id: 'sector', label: 'Sector & Peers' },
                 { id: 'business-model', label: 'Business Model' },
