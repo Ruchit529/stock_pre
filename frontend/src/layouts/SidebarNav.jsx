@@ -29,23 +29,23 @@ export default function SidebarNav({
   ];
 
   return (
-    <aside className={`w-52 shrink-0 flex flex-col justify-between border-r transition-colors duration-200 h-screen sticky top-0 ${
+    <aside className={`w-[220px] shrink-0 flex flex-col justify-between border-r transition-colors duration-200 h-screen sticky top-0 ${
       isDarkMode ? 'bg-[#0b0f19] border-slate-800 text-slate-200' : 'bg-white border-sky-100 text-slate-700'
     }`}>
       {/* Upper Section */}
-      <div className="p-3 space-y-3">
+      <div className="p-2.5 space-y-2">
         {/* Brand Header */}
-        <div className="flex items-center gap-2.5 px-2 py-1">
-          <div className="w-7 h-7 rounded-full bg-sky-600 flex items-center justify-center text-white font-bold shadow-md shadow-sky-600/20">
-            <TrendingUp className="w-4 h-4" />
+        <div className="flex items-center gap-2 px-2 py-1">
+          <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-sm shadow-blue-600/20">
+            <TrendingUp className="w-3.5 h-3.5" />
           </div>
-          <span className={`font-bold text-sm tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+          <span className={`font-bold text-xs tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
             Stock Analysis
           </span>
         </div>
 
         {/* Menu Navigation Links */}
-        <nav className="space-y-1">
+        <nav className="space-y-0.5">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeNav === item.id;
@@ -53,9 +53,9 @@ export default function SidebarNav({
               <button
                 key={item.id}
                 onClick={() => onSelectNav && onSelectNav(item.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20'
+                    ? 'bg-blue-600 text-white shadow-xs'
                     : isDarkMode
                       ? 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-sky-50'
@@ -70,20 +70,20 @@ export default function SidebarNav({
       </div>
 
       {/* Bottom Section: Theme Toggle Button */}
-      <div className="p-3 border-t border-slate-800/60">
+      <div className="p-2.5 border-t border-slate-800/60">
         <button
           onClick={onToggleTheme}
-          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
             isDarkMode
               ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
               : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
           }`}
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {isDarkMode ? <Moon className="w-3.5 h-3.5 text-indigo-400" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
-            <span className="text-xs font-bold">{isDarkMode ? 'Dark Mode' : 'Light Mode'}</span>
+            <span className="text-[11px] font-semibold">{isDarkMode ? 'Dark Mode' : 'Light Mode'}</span>
           </div>
-          <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${
+          <span className={`text-[9px] px-1 py-0.2 rounded font-bold ${
             isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600'
           }`}>
             Toggle

@@ -12,8 +12,22 @@ import {
   Sparkles,
   Search,
   Check,
+  CheckCircle2,
   BarChart3,
-  Loader2
+  Loader2,
+  Info,
+  PaintRoller,
+  Factory,
+  Globe,
+  Home,
+  Users,
+  FileText,
+  LineChart,
+  Scale,
+  FileSpreadsheet,
+  PieChart,
+  ArrowRight,
+  TrendingUp
 } from 'lucide-react';
 
 export default function StockAnalysisView({ company, onBack, isDarkMode = true, onSelectStock }) {
@@ -318,7 +332,7 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
   const tabs = [
     { id: 'overview', label: 'Overview' },
     { id: 'business-sector', label: 'Business Analysis' },
-    { id: 'fundamentals', label: 'Fundamentals' },
+{ id: 'fundamentals', label: 'Fundamentals' },
     { id: 'valuation', label: 'Valuation' },
     { id: 'entry-exit', label: 'Entry/Exit' },
     { id: 'portfolio', label: 'Portfolio' },
@@ -326,64 +340,83 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
     { id: 'risk', label: 'Risk' }
   ];
 
+  const logoText = (selectedCompany.symbol || 'AP').substring(0, 2).toUpperCase();
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-2.5">
       {/* 1. Header Bar with Back to Selector & Actions */}
-      <div className={`p-4 sm:p-5 rounded-2xl border ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-          {/* Back Button & Stock Title */}
-          <div className="flex items-center gap-4">
+      <div className={`p-3 rounded-xl border ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+          
+          {/* Left: Back Button & Stock Symbol Logo Tile & Stock Title */}
+          <div className="flex items-center gap-2.5">
             <button
               onClick={() => {
                 setSelectedCompany(null);
                 if (onSelectStock) onSelectStock(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-200' : 'bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200/60'
+              className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
               }`}
+              title="Change Stock"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Change Stock</span>
             </button>
 
+            {/* Stock Symbol Initials Box */}
+            <div className="w-8 h-8 rounded-lg bg-blue-600 font-bold text-white text-xs flex items-center justify-center shadow-xs shrink-0">
+              {logoText}
+            </div>
+
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{selectedCompany.name}</h1>
-                <span className="text-xs font-bold text-slate-400 uppercase">{selectedCompany.symbol}</span>
+              <div className="flex items-center gap-1.5">
+                <h1 className={`text-base font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{selectedCompany.name}</h1>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{selectedCompany.symbol}</span>
               </div>
-              <p className="text-xs text-slate-400 font-medium">Sector: {selectedCompany.sector}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Sector: {selectedCompany.sector}</p>
             </div>
           </div>
 
-          {/* Price & Action Buttons */}
+          {/* Right: Price with Sparkline & Action Buttons */}
           <div className="flex flex-wrap items-center gap-4">
-            <div>
-              <div className="flex items-baseline gap-2">
-                <span className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                  ₹{company.currentPrice?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                </span>
-                <span className={`text-xs font-bold ${isPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
-                  {isPositive ? '+' : ''}{company.priceChange} ({isPositive ? '+' : ''}{company.priceChangePercent}%)
-                </span>
+            <div className="flex items-center gap-2.5">
+              <div>
+                <div className="flex items-baseline gap-1.5">
+                  <span className={`text-lg font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    ₹{selectedCompany.currentPrice?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                  </span>
+                  <span className={`text-[11px] font-bold ${isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                    {isPositive ? '+' : ''}{selectedCompany.priceChange || '24.35'} ({isPositive ? '+' : ''}{selectedCompany.priceChangePercent || '0.77'}%)
+                  </span>
+                </div>
+                <p className="text-[10px] text-slate-400 font-medium text-right sm:text-left">
+                  Market Cap: ₹{selectedCompany.marketCapValue?.toLocaleString('en-IN') || '3,01,234'} Cr.
+                </p>
               </div>
-              <p className="text-xs text-slate-400 font-medium text-right sm:text-left">
-                Market Cap: ₹{company.marketCapValue?.toLocaleString('en-IN')} Cr.
-              </p>
+
+              {/* Green Sparkline Curve */}
+              <div className="w-12 h-6 flex items-center justify-center shrink-0">
+                <svg viewBox="0 0 60 25" className="w-full h-full overflow-visible">
+                  <path
+                    d="M 2 20 Q 15 15, 25 18 T 45 8 T 58 4"
+                    fill="none"
+                    stroke="#22c55e"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all active:scale-[0.98] cursor-pointer ${
-                isDarkMode ? 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200' : 'bg-slate-50 hover:bg-slate-100 border-slate-200/80 text-slate-700'
+            <div className="flex items-center gap-1.5">
+              <button className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200' : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
               }`}>
-                <Plus className="w-3.5 h-3.5 text-sky-600" />
+                <Plus className="w-3 h-3 text-blue-600 dark:text-blue-400" />
                 <span>Watchlist</span>
               </button>
-              <button className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all active:scale-[0.98] cursor-pointer shadow-2xs ${
-                isDarkMode 
-                  ? 'bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30' 
-                  : 'bg-sky-100/90 hover:bg-sky-200 text-sky-900 border border-sky-300/70'
-              }`}>
-                <Download className="w-3.5 h-3.5 text-sky-600" />
+              <button className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer bg-blue-600 hover:bg-blue-700 text-white shadow-xs active:scale-[0.98]">
+                <Download className="w-3 h-3" />
                 <span>Download Report</span>
               </button>
             </div>
@@ -391,21 +424,19 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
         </div>
 
         {/* Horizontal Navigation Sub-Tabs */}
-        <div className={`flex items-center gap-1 overflow-x-auto pt-2 border-t scrollbar-hide ${isDarkMode ? 'border-slate-800/60' : 'border-sky-100'}`}>
+        <div className={`flex items-center gap-5 overflow-x-auto pt-1.5 border-t scrollbar-hide ${isDarkMode ? 'border-slate-800/80' : 'border-slate-200/80'}`}>
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id || (tab.id === 'business-sector' && isBusinessSectorActive);
             return (
               <button
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer active:scale-[0.98] ${
+                className={`pb-1 text-[11px] font-bold whitespace-nowrap transition-all cursor-pointer relative ${
                   isActive
-                    ? isDarkMode
-                      ? 'bg-sky-500/30 text-sky-300 border border-sky-500/40'
-                      : 'bg-sky-500 text-white shadow-2xs'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
                     : isDarkMode
-                      ? 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                      : 'text-slate-600 hover:text-sky-800 hover:bg-sky-50'
+                      ? 'text-slate-400 hover:text-slate-200'
+                      : 'text-slate-500 hover:text-slate-900'
                 }`}
               >
                 {tab.label}
@@ -415,131 +446,325 @@ export default function StockAnalysisView({ company, onBack, isDarkMode = true, 
         </div>
       </div>
 
-      {/* 2. TAB 1: OVERVIEW SCREEN (Displays all key details directly without scoring) */}
+      {/* 2. TAB 1: OVERVIEW SCREEN */}
       {activeTab === 'overview' && (
-        <div className="space-y-4">
+        <div className="space-y-2.5">
           
-          {/* Quick Metrics Strip */}
-          <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
-            <div className={`grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-center divide-x ${isDarkMode ? 'divide-slate-800/40' : 'divide-sky-100'}`}>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">ROE</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.roe}%</span>
+          {/* ROW 1: 3 Cards Grid (Company Overview, Business Snapshot Radar, Key Highlights) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5">
+            
+            {/* Card 1: Company Overview */}
+            <div className={`lg:col-span-5 p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
+              isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'
+            }`}>
+              <div className="space-y-2">
+                <div className="flex items-center gap-1.5">
+                  <Building className="w-3.5 h-3.5 text-slate-400" />
+                  <h3 className={`font-bold text-xs ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    Company Overview
+                  </h3>
+                </div>
+                
+                <p className={`text-[11px] leading-relaxed font-normal line-clamp-3 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                  {selectedCompany.overview || 'Asian Paints is India’s largest paint company and a leading player in the global decorative paints industry. Operating across 15 countries with 27 paint manufacturing facilities worldwide.'}
+                </p>
               </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">ROCE</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.roce}%</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">OPM</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.opm}%</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">P/E</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.pe}</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">PEG</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.peg}</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">P/B</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.priceToBook}</span>
-              </div>
-              <div>
-                <span className="text-[10px] font-bold uppercase text-slate-400 block">Debt/Equity</span>
-                <span className={`text-sm font-bold mt-1 block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{keyMetrics.debtToEquity ?? 'N/A'}</span>
+
+              {/* Defensive Tip Blue Callout Box */}
+              <div className={`p-2 rounded-lg text-[11px] font-medium flex items-start gap-2 ${
+                isDarkMode 
+                  ? 'bg-blue-500/10 border border-blue-500/20 text-blue-300' 
+                  : 'bg-sky-50/90 border border-sky-200/80 text-sky-900'
+              }`}>
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                <span>
+                  {selectedCompany.sectorQuickTip || 'Defensive Tip: Consistent demand, brand moat & pricing power insulate against raw material crude volatility.'}
+                </span>
               </div>
             </div>
+
+            {/* Card 2: Business Snapshot Radar Chart */}
+            <div className={`lg:col-span-3 p-3.5 rounded-xl border flex flex-col justify-between space-y-1 ${
+              isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'
+            }`}>
+              <h3 className={`font-bold text-xs ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                Business Snapshot
+              </h3>
+              
+              <div className="py-0 flex items-center justify-center flex-1">
+                <RadarChart
+                  scores={selectedCompany.scoresSnapshot || {
+                    growth: 82,
+                    profitability: 86,
+                    valuation: 68,
+                    moat: 85,
+                    quality: 81
+                  }}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
+            </div>
+
+            {/* Card 3: Key Highlights */}
+            <div className={`lg:col-span-4 p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
+              isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'
+            }`}>
+              <div>
+                <h3 className={`font-bold text-xs mb-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  Key Highlights
+                </h3>
+
+                <ul className="space-y-1.5 text-[11px] font-medium">
+                  {(selectedCompany.keyHighlights || [
+                    'Strong brand with market leadership in decorative paints',
+                    'Consistent revenue and profit growth over 10+ years',
+                    'High ROE (28.6%) and ROCE (33.4%) metrics',
+                    'Wide distribution network with strong dealer relationships',
+                    'Healthy balance sheet with low debt levels'
+                  ]).map((highlight, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <div className="w-3.5 h-3.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="w-2 h-2 stroke-[3]" />
+                      </div>
+                      <span className={isDarkMode ? 'text-slate-300' : 'text-slate-700'}>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
           </div>
 
-          {/* Overview Section Layout */}
-          <div className="space-y-4">
-            {/* Company Overview Banner */}
-            <div className={`p-5 rounded-2xl border space-y-3 ${isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'}`}>
+          {/* ROW 2: 2 Cards Grid (Business Segments & Financial Highlights FY24) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5">
+            
+            {/* Card 1: Business Segments */}
+            <div className={`lg:col-span-5 p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
+              isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'
+            }`}>
               <div>
-                <h3 className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Company Overview</h3>
-                <p className="text-xs text-slate-400 font-medium">Core business model & market positioning</p>
-              </div>
-              
-              <p className={`text-xs leading-relaxed font-normal ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-                {selectedCompany.overview || business.whatBusinessDoes}
-              </p>
+                <h3 className={`font-bold text-xs mb-2.5 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  Business Segments
+                </h3>
 
-              {selectedCompany.sectorQuickTip && (
-                <div className={`p-3 rounded-xl text-xs font-semibold ${isDarkMode ? 'bg-blue-500/10 border border-blue-500/20 text-blue-400' : 'bg-sky-50 border border-sky-200 text-sky-800'}`}>
-                  {selectedCompany.sectorQuickTip}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <div className={`p-2 rounded-lg border flex flex-col items-start justify-between space-y-2 ${
+                    isDarkMode ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50/70 border-slate-200/60'
+                  }`}>
+                    <div className="w-6 h-6 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                      <PaintRoller className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className={`text-[10px] font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>Decorative Paints</div>
+                      <div className="text-[9px] text-slate-400 font-medium">Revenue Share</div>
+                      <div className="text-[11px] font-extrabold text-blue-600 dark:text-blue-400 mt-0.5">77.3%</div>
+                    </div>
+                  </div>
+
+                  <div className={`p-2 rounded-lg border flex flex-col items-start justify-between space-y-2 ${
+                    isDarkMode ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50/70 border-slate-200/60'
+                  }`}>
+                    <div className="w-6 h-6 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                      <Factory className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className={`text-[10px] font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>Industrial Coatings</div>
+                      <div className="text-[9px] text-slate-400 font-medium">Revenue Share</div>
+                      <div className="text-[11px] font-extrabold text-purple-600 dark:text-purple-400 mt-0.5">10.6%</div>
+                    </div>
+                  </div>
+
+                  <div className={`p-2 rounded-lg border flex flex-col items-start justify-between space-y-2 ${
+                    isDarkMode ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50/70 border-slate-200/60'
+                  }`}>
+                    <div className="w-6 h-6 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                      <Globe className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className={`text-[10px] font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>International Business</div>
+                      <div className="text-[9px] text-slate-400 font-medium">Revenue Share</div>
+                      <div className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">6.6%</div>
+                    </div>
+                  </div>
+
+                  <div className={`p-2 rounded-lg border flex flex-col items-start justify-between space-y-2 ${
+                    isDarkMode ? 'bg-slate-900/70 border-slate-800' : 'bg-slate-50/70 border-slate-200/60'
+                  }`}>
+                    <div className="w-6 h-6 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                      <Home className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className={`text-[10px] font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>Home Décor</div>
+                      <div className="text-[9px] text-slate-400 font-medium">Revenue Share</div>
+                      <div className="text-[11px] font-extrabold text-amber-600 dark:text-amber-400 mt-0.5">5.3%</div>
+                    </div>
+                  </div>
                 </div>
-              )}
+              </div>
+
+              <div className="text-[9px] text-slate-400 font-medium pt-1">
+                * Revenue share as of FY24
+              </div>
             </div>
 
-            {/* Side-by-Side Cards: Scores Snapshot Radar Chart & Key Highlights */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              {/* Card 1: Scores Snapshot Radar Chart */}
-              <div className={`p-5 rounded-2xl border space-y-3 flex flex-col justify-between ${
-                isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'
-              }`}>
-                <h3 className={`font-bold text-sm tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                  Scores Snapshot
+            {/* Card 2: Financial Highlights (FY24) Bar Charts */}
+            <div className={`lg:col-span-7 p-3.5 rounded-xl border flex flex-col justify-between space-y-2.5 ${
+              isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'
+            }`}>
+              <div>
+                <h3 className={`font-bold text-xs mb-2.5 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  Financial Highlights (FY24)
                 </h3>
-                
-                <div className="py-2 flex items-center justify-center flex-1">
-                  <RadarChart
-                    scores={fundamental.scoresSnapshot || {
-                      growth: 82,
-                      profitability: 88,
-                      efficiency: 76,
-                      financialHealth: 92,
-                      valuation: 74,
-                      quality: 85
-                    }}
-                    isDarkMode={isDarkMode}
-                  />
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {/* Revenue */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">Revenue</span>
+                    <div className={`text-[11px] font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>₹34,876 Cr.</div>
+                    <div className="text-[9px] font-bold text-emerald-500">▲ 12.7% YoY</div>
+
+                    <div className="flex items-end gap-1 h-10 pt-1">
+                      <div className="flex-1 bg-blue-500/40 rounded-t h-[45%]" title="FY20" />
+                      <div className="flex-1 bg-blue-500/60 rounded-t h-[60%]" title="FY21" />
+                      <div className="flex-1 bg-blue-500/80 rounded-t h-[75%]" title="FY22" />
+                      <div className="flex-1 bg-blue-500 rounded-t h-[90%]" title="FY23" />
+                      <div className="flex-1 bg-blue-600 rounded-t h-[100%]" title="FY24" />
+                    </div>
+                    <div className="flex justify-between text-[7.5px] font-bold text-slate-400 pt-0.5">
+                      <span>FY20</span><span>FY21</span><span>FY22</span><span>FY23</span><span>FY24</span>
+                    </div>
+                  </div>
+
+                  {/* Net Profit */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">Net Profit</span>
+                    <div className={`text-[11px] font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>₹5,637 Cr.</div>
+                    <div className="text-[9px] font-bold text-emerald-500">▲ 15.3% YoY</div>
+
+                    <div className="flex items-end gap-1 h-10 pt-1">
+                      <div className="flex-1 bg-purple-500/40 rounded-t h-[40%]" title="FY20" />
+                      <div className="flex-1 bg-purple-500/60 rounded-t h-[55%]" title="FY21" />
+                      <div className="flex-1 bg-purple-500/80 rounded-t h-[70%]" title="FY22" />
+                      <div className="flex-1 bg-purple-500 rounded-t h-[85%]" title="FY23" />
+                      <div className="flex-1 bg-purple-600 rounded-t h-[100%]" title="FY24" />
+                    </div>
+                    <div className="flex justify-between text-[7.5px] font-bold text-slate-400 pt-0.5">
+                      <span>FY20</span><span>FY21</span><span>FY22</span><span>FY23</span><span>FY24</span>
+                    </div>
+                  </div>
+
+                  {/* OPM */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">OPM</span>
+                    <div className={`text-[11px] font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>18.7%</div>
+                    <div className="text-[9px] font-bold text-emerald-500">▲ 1.2% YoY</div>
+
+                    <div className="flex items-end gap-1 h-10 pt-1">
+                      <div className="flex-1 bg-teal-500/40 rounded-t h-[65%]" title="FY20" />
+                      <div className="flex-1 bg-teal-500/60 rounded-t h-[70%]" title="FY21" />
+                      <div className="flex-1 bg-teal-500/80 rounded-t h-[80%]" title="FY22" />
+                      <div className="flex-1 bg-teal-500 rounded-t h-[90%]" title="FY23" />
+                      <div className="flex-1 bg-teal-600 rounded-t h-[100%]" title="FY24" />
+                    </div>
+                    <div className="flex justify-between text-[7.5px] font-bold text-slate-400 pt-0.5">
+                      <span>FY20</span><span>FY21</span><span>FY22</span><span>FY23</span><span>FY24</span>
+                    </div>
+                  </div>
+
+                  {/* ROE */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-slate-400 font-bold uppercase block">ROE</span>
+                    <div className={`text-[11px] font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>28.6%</div>
+                    <div className="text-[9px] font-bold text-emerald-500">▲ 2.1% YoY</div>
+
+                    <div className="flex items-end gap-1 h-10 pt-1">
+                      <div className="flex-1 bg-orange-500/40 rounded-t h-[60%]" title="FY20" />
+                      <div className="flex-1 bg-orange-500/60 rounded-t h-[72%]" title="FY21" />
+                      <div className="flex-1 bg-orange-500/80 rounded-t h-[80%]" title="FY22" />
+                      <div className="flex-1 bg-orange-500 rounded-t h-[92%]" title="FY23" />
+                      <div className="flex-1 bg-orange-600 rounded-t h-[100%]" title="FY24" />
+                    </div>
+                    <div className="flex justify-between text-[7.5px] font-bold text-slate-400 pt-0.5">
+                      <span>FY20</span><span>FY21</span><span>FY22</span><span>FY23</span><span>FY24</span>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
-              {/* Card 2: Key Highlights with View Full Analysis CTA */}
-              <div className={`p-5 rounded-2xl border flex flex-col justify-between space-y-4 ${
-                isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-sky-100 shadow-xs'
-              }`}>
-                <div>
-                  <h3 className={`font-bold text-sm mb-4 tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                    Key Highlights
-                  </h3>
-
-                  <ul className="space-y-3 text-xs font-semibold">
-                    {(selectedCompany.keyHighlights || [
-                      'Strong brand with market leadership',
-                      'Consistent revenue and profit growth',
-                      'High ROE and ROCE',
-                      'Low debt and robust balance sheet',
-                      'Attractive valuations with MOS > 20%'
-                    ]).map((highlight, idx) => (
-                      <li key={idx} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-500 flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 stroke-[3]" />
-                        </div>
-                        <span className={isDarkMode ? 'text-slate-300' : 'text-slate-700'}>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
+              <div className="flex justify-end pt-1">
                 <button
-                  onClick={() => setActiveTab('fundamentals')}
-                  className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2 shadow-2xs ${
-                    isDarkMode
-                      ? 'bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/30'
-                      : 'bg-sky-100/90 hover:bg-sky-200 text-sky-900 border border-sky-300/70'
-                  }`}
+                  onClick={() => handleTabChange('fundamentals')}
+                  className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
                 >
-                  <span>View Full Analysis</span>
+                  <span>View Detailed Financials</span>
+                  <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
+            </div>
 
+          </div>
+
+          {/* ROW 3: Quick Links */}
+          <div className={`p-3 rounded-xl border space-y-1.5 ${
+            isDarkMode ? 'bg-[#0f172a] border-slate-800' : 'bg-white border-slate-200/80 shadow-2xs'
+          }`}>
+            <h3 className={`font-bold text-xs ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              Quick Links
+            </h3>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <Users className="w-3 h-3 text-blue-500" />
+                <span>Peer Comparison</span>
+              </button>
+
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <FileText className="w-3 h-3 text-indigo-500" />
+                <span>Latest Results</span>
+              </button>
+
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <LineChart className="w-3 h-3 text-emerald-500" />
+                <span>Quarterly Performance</span>
+              </button>
+
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <DollarSign className="w-3 h-3 text-amber-500" />
+                <span>Cash Flow</span>
+              </button>
+
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <Scale className="w-3 h-3 text-purple-500" />
+                <span>Balance Sheet</span>
+              </button>
+
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <FileSpreadsheet className="w-3 h-3 text-sky-500" />
+                <span>Annual Reports</span>
+              </button>
+
+              <button className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}>
+                <PieChart className="w-3 h-3 text-rose-500" />
+                <span>Shareholding Pattern</span>
+              </button>
             </div>
           </div>
+
         </div>
       )}
 

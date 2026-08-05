@@ -1,23 +1,38 @@
 import React from 'react';
 
-export default function RadarChart({ scores, isDarkMode = true }) {
-  // Axes: Growth, Profitability, Efficiency, Financial Health, Valuation, Quality
-  const labels = [
-    { key: 'growth', label: 'Growth' },
-    { key: 'profitability', label: 'Profitability' },
-    { key: 'efficiency', label: 'Efficiency' },
-    { key: 'financialHealth', label: 'Financial Health' },
-    { key: 'valuation', label: 'Valuation' },
-    { key: 'quality', label: 'Quality' }
+export default function RadarChart({ scores, isDarkMode = false }) {
+  // 5-axis layout: Quality, Growth, Profitability, Valuation, Moat
+  const defaultScores = {
+    quality: 8.1,
+    growth: 8.2,
+    profitability: 8.6,
+    valuation: 6.8,
+    moat: 8.5
+  };
+
+  const currentScores = scores ? {
+    quality: scores.quality ? (scores.quality > 10 ? (scores.quality / 10).toFixed(1) : Number(scores.quality).toFixed(1)) : '8.1',
+    growth: scores.growth ? (scores.growth > 10 ? (scores.growth / 10).toFixed(1) : Number(scores.growth).toFixed(1)) : '8.2',
+    profitability: scores.profitability ? (scores.profitability > 10 ? (scores.profitability / 10).toFixed(1) : Number(scores.profitability).toFixed(1)) : '8.6',
+    valuation: scores.valuation ? (scores.valuation > 10 ? (scores.valuation / 10).toFixed(1) : Number(scores.valuation).toFixed(1)) : '6.8',
+    moat: scores.moat ? (scores.moat > 10 ? (scores.moat / 10).toFixed(1) : Number(scores.moat).toFixed(1)) : '8.5'
+  } : defaultScores;
+
+  const axes = [
+    { label: 'Growth', key: 'growth', val: parseFloat(currentScores.growth) },
+    { label: 'Profitability', key: 'profitability', val: parseFloat(currentScores.profitability) },
+    { label: 'Valuation', key: 'valuation', val: parseFloat(currentScores.valuation) },
+    { label: 'Moat', key: 'moat', val: parseFloat(currentScores.moat) },
+    { label: 'Quality', key: 'quality', val: parseFloat(currentScores.quality) }
   ];
 
-  const center = 110;
-  const radius = 70;
-  const totalAxes = labels.length;
+  const center = 90;
+  const radius = 54;
+  const totalAxes = axes.length;
 
-  // Calculate points for grid polygon levels (20%, 40%, 60%, 80%, 100%)
+  // Points for pentagon grid rings (20%, 40%, 60%, 80%, 100%)
   const getPolygonPoints = (r) => {
-    return labels.map((_, i) => {
+    return axes.map((_, i) => {
       const angle = (Math.PI * 2 * i) / totalAxes - Math.PI / 2;
       const x = center + r * Math.cos(angle);
       const y = center + r * Math.sin(angle);
@@ -25,42 +40,41 @@ export default function RadarChart({ scores, isDarkMode = true }) {
     }).join(' ');
   };
 
-  // Calculate data polygon points
-  const dataPoints = labels.map((item, i) => {
-    const val = scores?.[item.key] ?? 75;
-    const r = (val / 100) * radius;
+  // Data polygon points
+  const dataPoints = axes.map((item, i) => {
+    const norm = Math.min(10, Math.max(0, item.val)) / 10;
+    const r = norm * radius;
     const angle = (Math.PI * 2 * i) / totalAxes - Math.PI / 2;
     const x = center + r * Math.cos(angle);
     const y = center + r * Math.sin(angle);
     return `${x},${y}`;
   }).join(' ');
 
-  // Calculate label positions slightly outside radius
-  const labelPositions = labels.map((item, i) => {
+  // Label positions outside polygon
+  const labelPositions = axes.map((item, i) => {
     const angle = (Math.PI * 2 * i) / totalAxes - Math.PI / 2;
-    const r = radius + 22;
+    const r = radius + 18;
     const x = center + r * Math.cos(angle);
     const y = center + r * Math.sin(angle);
     return { ...item, x, y };
   });
 
   return (
-    <div className="relative w-full max-w-[260px] mx-auto aspect-square flex items-center justify-center">
-      <svg viewBox="0 0 220 220" className="w-full h-full overflow-visible">
-        {/* Background Grid Rings */}
+    <div className="relative w-full max-w-[185px] mx-auto aspect-square flex items-center justify-center p-1">
+      <svg viewBox="0 0 180 180" className="w-full h-full overflow-visible">
+        {/* Background Grid Concentric Pentagons */}
         {[0.2, 0.4, 0.6, 0.8, 1.0].map((level, idx) => (
           <polygon
             key={idx}
             points={getPolygonPoints(radius * level)}
             fill="none"
             stroke={isDarkMode ? '#334155' : '#cbd5e1'}
-            strokeWidth={idx === 4 ? '1.5' : '1'}
-            strokeDasharray={idx === 4 ? 'none' : '2,2'}
+            strokeWidth={idx === 4 ? '1.2' : '0.8'}
           />
         ))}
 
-        {/* Axis Lines from center */}
-        {labels.map((_, i) => {
+        {/* Axis Spokes from Center */}
+        {axes.map((_, i) => {
           const angle = (Math.PI * 2 * i) / totalAxes - Math.PI / 2;
           const x2 = center + radius * Math.cos(angle);
           const y2 = center + radius * Math.sin(angle);
@@ -77,18 +91,18 @@ export default function RadarChart({ scores, isDarkMode = true }) {
           );
         })}
 
-        {/* Data Filled Polygon */}
+        {/* Blue Filled Data Polygon */}
         <polygon
           points={dataPoints}
-          fill={isDarkMode ? 'rgba(16, 185, 129, 0.25)' : 'rgba(16, 185, 129, 0.2)'}
-          stroke="#10b981"
+          fill={isDarkMode ? 'rgba(59, 130, 246, 0.25)' : 'rgba(59, 130, 246, 0.18)'}
+          stroke="#3b82f6"
           strokeWidth="2"
         />
 
-        {/* Data Vertices Dots */}
-        {labels.map((item, i) => {
-          const val = scores?.[item.key] ?? 75;
-          const r = (val / 100) * radius;
+        {/* Data Points (Blue Vertices) */}
+        {axes.map((item, i) => {
+          const norm = Math.min(10, Math.max(0, item.val)) / 10;
+          const r = norm * radius;
           const angle = (Math.PI * 2 * i) / totalAxes - Math.PI / 2;
           const x = center + r * Math.cos(angle);
           const y = center + r * Math.sin(angle);
@@ -97,26 +111,34 @@ export default function RadarChart({ scores, isDarkMode = true }) {
               key={i}
               cx={x}
               cy={y}
-              r="3.5"
-              fill="#10b981"
+              r="3"
+              fill="#3b82f6"
               stroke={isDarkMode ? '#0f172a' : '#ffffff'}
               strokeWidth="1.5"
             />
           );
         })}
 
-        {/* Outer Axis Text Labels */}
+        {/* Outer Axis Labels & Scores */}
         {labelPositions.map((lp, i) => (
-          <text
-            key={i}
-            x={lp.x}
-            y={lp.y}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            className={`text-[9px] font-bold ${isDarkMode ? 'fill-slate-300' : 'fill-slate-600'}`}
-          >
-            {lp.label}
-          </text>
+          <g key={i}>
+            <text
+              x={lp.x}
+              y={lp.y - 5}
+              textAnchor="middle"
+              className={`text-[8.5px] font-medium ${isDarkMode ? 'fill-slate-300' : 'fill-slate-600'}`}
+            >
+              {lp.label}
+            </text>
+            <text
+              x={lp.x}
+              y={lp.y + 5}
+              textAnchor="middle"
+              className={`text-[9px] font-bold ${isDarkMode ? 'fill-white' : 'fill-slate-900'}`}
+            >
+              {lp.val.toFixed(1)}
+            </text>
+          </g>
         ))}
       </svg>
     </div>

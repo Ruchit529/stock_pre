@@ -51,7 +51,7 @@ export default function DashboardView({ onSelectStock, isDarkMode = false }) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-start max-w-[1550px] mx-auto w-full text-xs">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-start w-full text-xs">
       
       {/* LEFT & CENTER MAIN AREA (9 Columns) */}
       <div className="lg:col-span-9 space-y-2.5">
